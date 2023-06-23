@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -55,5 +55,11 @@ api.post('/add-user', [
     
     validateParams
 ],createUser);
+
+//Ver todos los usuarios, restringido a los administradores
+api.get('/allUsers', [
+    validateJWT,
+    administradorRol
+], viewAllUsers)
 
 module.exports = api

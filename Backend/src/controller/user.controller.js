@@ -41,6 +41,24 @@ exports.createUser = async(req, res) => {
     }
 }
 
+//Ver todos los usuarios
+exports.viewAllUsers = async(req, res)=>{
+    try {
+        
+        const allUsers = await UserSchema.find();
+
+        if(allUsers.length == 0) return res.status(404).send({message: 'No se han encontrado usuarios en la base de datos.'});
+
+        return res.status(200).send({message: 'Usuarios encontrados', allUsers});
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message: 'No se pudo completar la tarea.'})
+    }
+}
+
+//
+
 // ----------------------- Login -----------------------------------
 
 exports.login = async (req, res)=>{
