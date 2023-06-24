@@ -5,6 +5,10 @@
   padding:0px;
 }
 
+article{
+  padding-top: 2%;
+}
+
 section::after {
   content: "";
   display: table;
