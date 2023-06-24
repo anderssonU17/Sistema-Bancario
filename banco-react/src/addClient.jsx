@@ -5,7 +5,6 @@ import "./client.css";
 export const AddClient = () => {
   return (
     <>
-    <article style={{paddingTop: "2%"}}>
         <h1>Agregar cliente</h1>
         <div className="container">
             <div className="formContainer">
@@ -63,7 +62,6 @@ export const AddClient = () => {
                 </div>
             </div>
         </div>
-    </article>
     </>
   )
 }
