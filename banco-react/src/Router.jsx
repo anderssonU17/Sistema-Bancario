@@ -16,11 +16,13 @@ export const Router =()=>{
                         ["Dashboard", "img/dashboard.svg"]
                     ]}
                 />
+                <article>
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<AddClient />}></Route>
                     </Routes>
                 </BrowserRouter>
+                </article>
             </section>
         </>
     );
