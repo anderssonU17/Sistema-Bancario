@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login, viewAllUsers, updateUser} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -19,7 +19,7 @@ api.post('/login', [
     validateParams
     
 ],login)
-
+// *******************************Funciones de ADMINISTRADOR *******************************************
 // ------ Crear usuario
 api.post('/add-user', [
     validateJWT,
@@ -62,12 +62,24 @@ api.get('/allUsers', [
     administradorRol
 ], viewAllUsers)
 
-//Editar usuario por id
+//Editar usuario por id (este se tiene que mandar en el body)
 api.put('/updateUser', [
     validateJWT,
     administradorRol,
     check('idUser', 'El parametro "idUser" es necesario para actualizar el usuario. ').not().isEmpty(),
     validateParams
 ], updateUser)
+
+// *******************************Funciones de CLIENTE *******************************************
+
+//Ver perfil propio
+api.get('/viewOwnUser', [
+    validateJWT
+], viewOwnUser)
+
+//Editar propio perfil
+api.put('/updateOwnUser', [
+    validateJWT
+], updateOwnUser)
 
 module.exports = api

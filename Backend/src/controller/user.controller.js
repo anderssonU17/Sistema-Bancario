@@ -135,6 +135,7 @@ exports.updateUser = async(req, res)=>{
 
     } catch (error) {
         console.error(error);
+        res.status(500).send({message: 'No se pudo completar la tarea.'})
     }
 }
 
@@ -162,6 +163,73 @@ exports.deleteUser = async(req, res)=>{
         console.error(error);
     }
 }
+
+// *******************************Funciones de CLIENTE *******************************************
+//Ver mi perfil
+exports.viewOwnUser = async(req, res) =>{
+    try {
+        
+        const idUser = req.user._id;
+
+        //Comprobar que el usuario exista
+        const user = await UserSchema.findById(idUser);
+        if(!user) return res.status(404).send({message: 'No se encontro el usuario en la base de datos.'});
+
+        //Retornar el usuario 
+        return res.status(200).send({message: 'Usuario encontrado.', user})
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message: 'No se pudo completar la tarea.'})
+    }
+}
+
+//Editar mi perfil
+exports.updateOwnUser = async(req, res) => {
+    try {
+        
+        const id = req.user._id;
+
+        const findUser = await UserSchema.findById(id);
+
+        //Comprobaciones antes de actualizar el usuario
+        if(!findUser) return res.status(404).send({message: 'No se ha encontrado el usuario en la base de datos.'});
+
+        let updateUser = new UserSchema(req.body);
+        //Eliminar todos los datos que el usuario no puede actualizar de su propia cuenta.
+        delete updateUser._doc.number_Account;
+        delete updateUser._doc._id
+        delete updateUser._doc.userName
+        delete updateUser._doc.address
+        delete updateUser._doc.DPI
+        delete updateUser._doc.workName
+        delete updateUser._doc.monthlyIncome
+
+        //Eliminar datos por si no vienen en la peticion, asi evitar que se sobreescriban a los datos reales
+        !updateUser.numberOfTransactions && delete updateUser._doc.numberOfTransactions
+        !updateUser.favorites && delete updateUser._doc.favorites
+
+        //Encriptar la contrasenia solo si viene
+        if(req.body.password) updateUser.password = encryptPassword(req.body.password)
+
+        const userUpdatedSuccessfully = await UserSchema.findByIdAndUpdate(
+            {_id: id}, 
+            {...updateUser}, 
+            {
+                new: true
+            }
+        );        
+
+        if(!userUpdatedSuccessfully) return res.status(400).send({message: 'No se ha podido actualizar el usuario.'});
+
+        return res.status(200).send({message: 'Se ha actualizado el usuario correctamente.', updateUser});
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message: 'No se pudo completar la tarea.'})
+    }
+}
+
 
 // ----------------------- Login -----------------------------------
 
