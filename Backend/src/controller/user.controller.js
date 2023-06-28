@@ -204,6 +204,8 @@ exports.updateOwnUser = async(req, res) => {
         delete updateUser._doc.DPI
         delete updateUser._doc.workName
         delete updateUser._doc.monthlyIncome
+        delete updateUser._doc.currency
+        delete updateUser._doc.accountBalance
 
         //Eliminar datos por si no vienen en la peticion, asi evitar que se sobreescriban a los datos reales
         !updateUser.numberOfTransactions && delete updateUser._doc.numberOfTransactions
@@ -230,6 +232,50 @@ exports.updateOwnUser = async(req, res) => {
     }
 }
 
+//Agregar a favoritos
+exports.addFavorite = async(req, res)=>{
+    try {
+        
+        const idUser = req.user._id;
+
+        //Obtener el id de la cuenta que se quiere agregar a favoritos
+        const {number_Account, alias} = req.body;
+
+        //Verficiar que el numero de cuenta exista
+        const accountExists = await UserSchema.findOne({number_Account: number_Account});
+        if(!accountExists) 
+        return res.status(404).send(
+                    {message: 
+                        'El numero de cuenta que se quiere agregar a favoritos no se encontro en la base de datos.'
+                    }
+                )
+        
+        //Extraer el tipo de cuenta
+        const {typeAccount} = accountExists;
+
+        const saveFavorite = await UserSchema.updateOne(
+                {_id: idUser},
+                {
+                    $push: {
+                        favorites: {
+                            alias: alias,
+                            number_Account: number_Account,
+                            typeAccount: typeAccount
+                        }
+                    }
+                }
+            )
+        
+        if(!saveFavorite)
+        return res.status(404).send({message: 'No se pudo agregar la cuenta a favoritos.'});
+
+        return res.status(200).send({message: 'Cuenta agregada a favoritos correctamente.', saveFavorite});
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea.'})
+    }
+}
 
 // ----------------------- Login -----------------------------------
 

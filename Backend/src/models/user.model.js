@@ -73,14 +73,14 @@ const UserSchema = new Schema({
     favorites: [
         {
             number_Account: {
-                type: Schema.Types.ObjectId,
+                type: String,
                 ref: 'users'
             },
             typeAccount: {
                 require: true,
                 type: String
             },
-            alis: {
+            alias: {
                 type: String
             }
 
