@@ -237,6 +237,7 @@ exports.addFavorite = async(req, res)=>{
     try {
         
         const idUser = req.user._id;
+        const userLogin = await UserSchema.findById(idUser)
 
         //Obtener el id de la cuenta que se quiere agregar a favoritos
         const {number_Account, alias} = req.body;
@@ -249,6 +250,11 @@ exports.addFavorite = async(req, res)=>{
                         'El numero de cuenta que se quiere agregar a favoritos no se encontro en la base de datos.'
                     }
                 )
+
+        //Evitar que se agregue el mismo alias
+        const aliasExists = userLogin.favorites.filter( favorite => favorite.alias == req.body.alias )
+        if(aliasExists.length)
+        return res.status(400).send({message: 'Ya has agregado una cuenta con este alias.'})
         
         //Extraer el tipo de cuenta
         const {typeAccount} = accountExists;
@@ -274,6 +280,29 @@ exports.addFavorite = async(req, res)=>{
     } catch (error) {
         console.error(error);
         return res.status(500).send({message: 'No se pudo completar la tarea.'})
+    }
+}
+
+//Ver listado de mis favoritos
+exports.viewOwnFavorites = async(req,res) =>{
+    try {
+        
+        const idUser = req.user._id;
+
+        //Bucar al usuario
+        const userFind = await UserSchema.findById(idUser);
+        if(!userFind) 
+        return res.status(404).send({message: 'No se ha encontrado el usuario en la base de datos.'});
+
+        //Comprobar que si tenga usuarios agregados a favoritos
+        if( !userFind.favorites.length ) 
+        return res.status(404).send({message: 'No se han agregado cuentas a favoritos.'})
+
+        //Retornar los favoritos
+        return res.status(200).json({'Favoriotos:': userFind.favorites});
+
+    } catch (error) {
+        console.error(error);
     }
 }
 

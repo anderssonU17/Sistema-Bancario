@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite, viewOwnFavorites} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -89,5 +89,10 @@ api.put('/addFavorite', [
     check('alias', 'El parametro "alias" es necesari para agregar una cuenta a favoritos.').not().isEmpty(),
     validateParams
 ], addFavorite)
+
+//Ver mi lista de favoritos
+api.get('/viewOwnFavorites', [
+    validateJWT
+], viewOwnFavorites)
 
 module.exports = api
