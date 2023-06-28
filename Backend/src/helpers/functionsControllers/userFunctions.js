@@ -63,6 +63,8 @@ exports.convertCurrencies = async(base, rate, quantity)=>{
     let response = await axios.get(`https://api.exchangerate-api.com/v4/latest/${base}`);
 
     response = response.data.rates[rate];
+    console.log(`Lo que nos respondio el conversor de ${base} a ${rate}`);
+    console.log(response);
 
     return parseFloat(response) * parseFloat(quantity)
 
@@ -77,6 +79,8 @@ exports.checkSalaryNeeded = async(base, quantity) => {
   try {
     
     let response = await this.convertCurrencies(base, 'GTQ', quantity)
+    console.log(`Conviertiendo ${base} ${quantity} a quetzales`);
+    console.log(response);
 
     if(response < 100){
       return false;

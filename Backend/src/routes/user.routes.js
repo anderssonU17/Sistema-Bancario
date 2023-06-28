@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login, viewAllUsers} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers, updateUser} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -49,9 +49,9 @@ api.post('/add-user', [
     //Los parametros para ver si su ingreso mensual es mayor a Q100.00 sin importar que moneda se use al crear la cuenta
 
     //Que tipo de moneda va usar para abrir la cuenta
-    check('base', 'El parametro base es necesario para crear la cuenta').not().isEmpty(),
+    check('currency', 'El parametro currency es necesario para crear la cuenta').not().isEmpty(),
     //Que cantidad de la moneda va usar
-    check('quantity', 'El parametro quantity es necesario para crear la cuenta').not().isEmpty(),
+    check('monthlyIncome', 'El parametro monthlyIncome es necesario para crear la cuenta').not().isEmpty(),
     
     validateParams
 ],createUser);
@@ -61,5 +61,13 @@ api.get('/allUsers', [
     validateJWT,
     administradorRol
 ], viewAllUsers)
+
+//Editar usuario por id
+api.put('/updateUser', [
+    validateJWT,
+    administradorRol,
+    check('idUser', 'El parametro "idUser" es necesario para actualizar el usuario. ').not().isEmpty(),
+    validateParams
+], updateUser)
 
 module.exports = api

@@ -49,12 +49,25 @@ const UserSchema = new Schema({
         require: true,
         type: String
     },
+    //Moneda que va manejar la cuenta
+    currency: {
+        require: true,
+        type: String
+    },
+    //Salario mensual del usuario
     monthlyIncome: {
         require: true,
         type: Number,
     },
+    //Dinero que tenga en la cuenta
     accountBalance: {
         type: Number,
+        default: 0
+    },
+    //Contador de trasacciones
+    numberOfTransactions: {
+        type: Number,
+        require: false,
         default: 0
     },
     favorites: [
