@@ -45,6 +45,7 @@ a{
 }
 
 .navbar__li-box {
+  display: inline-block;
   height: 43px;
   margin-top: 15px;
   width: 100%;
