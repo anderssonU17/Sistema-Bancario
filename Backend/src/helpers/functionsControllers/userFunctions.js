@@ -5,6 +5,18 @@ const bcrypt = require('bcrypt')
 
 const userModel = require("../../models/user.model");
 
+//Comprobar que un usuario exista
+exports.userExists = async (idUser) =>{
+  try {
+    
+    const userFind = await userModel.findById(idUser)
+    if(!userFind) return false
+    return userFind
+
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 //Generar un numero aleatorio de 10 digitos
 exports.genereteNumberAccount = async () => {

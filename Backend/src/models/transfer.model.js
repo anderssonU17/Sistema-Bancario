@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const TransferSchema = new Schema({
     movementType: {
         type: String,
-        enum: ['TRANSFERENCIA', 'COMPRA', 'CREDITO'],
+        enum: ['TRANSFERENCIA', 'COMPRA', 'CREDITO', 'DEPOSITO'],
         require: true
     },
     date: {
@@ -18,13 +18,23 @@ const TransferSchema = new Schema({
         require: true,
         type: Number
     },
-    sender: {
+    currency: {
         require: true,
+        type: String
+    },
+    sender: {
+        //Se retira el necesario por si lo que se hace es un deposito
+        // require: true, 
         type: Number
     },
     beneficiary: {
         require: true,
         type: Number
+    },
+    //El tipo de cuenta del beneficiario
+    typeAccount: {
+        require: true,
+        type: String
     }
 })
 
