@@ -59,4 +59,5 @@ a{
 .navbar__li-box:hover {
   border-left: 7px solid #3969FC;
   cursor: pointer;
+  width: 97%;
 }
