@@ -7,6 +7,7 @@ export const AddClient = () => {
     <>
         <h1>Agregar cliente</h1>
         <div className="container" style={{marginTop: "5%"}}>
+
             <div className="formContainer">
                 <form>
                     <div className="inputContainer">
@@ -21,7 +22,7 @@ export const AddClient = () => {
                         <label>ID</label><br/>
                         <input type="text" name="nCuenta" placeholder="Número de cuenta"></input>
                     </div>
-                    <div className="inputContainer" style={{marginTop: "22px"}}>
+                    <div className="inputContainer" style={{marginTop: "19px"}}>
                         <label>DPI</label><br/>
                         <input type="text" name="DPI" placeholder="DPI"></input>
                     </div>
@@ -31,6 +32,7 @@ export const AddClient = () => {
                     </div>
                 </form>
             </div>
+
             <div className="formContainer">
                 <form>
                     <div className="inputContainer">
@@ -44,7 +46,7 @@ export const AddClient = () => {
                     <div className="inputContainer">
                         <label>Contraseña</label><br/>
                         <input type="password" name="contrasena" id="pass" placeholder="Contraseña"></input>
-                        <div style={{paddingTop: "1%"}}>
+                        <div style={{paddingTop: "1px"}}>
                             <input type="checkbox" onChange={showPassword}/>Mostrar contraseña
                         </div>
                     </div>
@@ -58,6 +60,7 @@ export const AddClient = () => {
                     </div>
                 </form>
             </div>
+            
             <div className="bCenter">
                 <div className="buttonContainer">
                     <input type="submit" value={"Crear cliente"}></input>
