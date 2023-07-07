@@ -2,7 +2,7 @@
 
 const bcrypt = require('bcrypt')
 
-const { repeatUser, genereteNumberAccount, checkSalaryNeeded, convertCurrencies, encryptPassword } = require('../helpers/functionsControllers/userFunctions');
+const { repeatUser, genereteNumberAccount, checkSalaryNeeded, convertCurrencies, encryptPassword, checkAliasRepeted } = require('../helpers/functionsControllers/userFunctions');
 const UserSchema = require('../models/user.model');
 const { generateJWT } = require('../helpers/create-jwt');
 
@@ -38,7 +38,7 @@ exports.createUser = async(req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).send({message: 'No se pudo completar la tarea.'})
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -135,7 +135,7 @@ exports.updateUser = async(req, res)=>{
 
     } catch (error) {
         console.error(error);
-        res.status(500).send({message: 'No se pudo completar la tarea.'})
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -161,6 +161,7 @@ exports.deleteUser = async(req, res)=>{
 
     } catch (error) {
         console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -180,7 +181,7 @@ exports.viewOwnUser = async(req, res) =>{
 
     } catch (error) {
         console.error(error);
-        res.status(500).send({message: 'No se pudo completar la tarea.'})
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -228,7 +229,7 @@ exports.updateOwnUser = async(req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).send({message: 'No se pudo completar la tarea.'})
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -279,7 +280,7 @@ exports.addFavorite = async(req, res)=>{
 
     } catch (error) {
         console.error(error);
-        return res.status(500).send({message: 'No se pudo completar la tarea.'})
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -303,6 +304,93 @@ exports.viewOwnFavorites = async(req,res) =>{
 
     } catch (error) {
         console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
+    }
+}
+
+//Editar un favorito (solo se hace por medio del id del favorito)
+exports.updateOwnFavorite = async(req, res)=> {
+    try {
+        
+        const idUser = req.user._id;
+        
+        //Comprobar que el usuario exista
+        const findUser = await UserSchema.findById(idUser);
+        if( !findUser ) 
+        return res.status(404).send({message: 'Su usuario no se ha encontrado en al base de datos.'});
+
+        //Obtenemos los datos de la cuenta en favoritos que se quiere actualizar
+        const { alias , number_Account , idFavorite} = req.body
+
+        //Comprobar que la cuenta nueva exista
+        const number_AccountExists = await UserSchema.findOne({number_Account: number_Account});
+        if( !number_AccountExists ) 
+        return res.status(404).send({message: 'No se ha encontrado el numero de cuenta en la base de datos.'})
+
+        //Comprobar que el usuario si tenga entre sus favoritos el id que quiere editar
+        const oldFavorite = findUser.favorites.filter( favorite => {            
+            return JSON.stringify(favorite._id) == `"${req.body.idFavorite}"`
+        })
+        if(oldFavorite.length == 0) return res.status(404).send({message: 'No se ha encontrado el favorito en tu lista.'})
+
+        //Comprobar que el alias que vamos a usar como nuevo no este repetido, si el id del favorito coincide con el 
+        //que encontramos arriba lo dejara pasar.
+
+        if( checkAliasRepeted( findUser.favorites , req.body.alias , idFavorite ) )
+        return res.status(400).send({message: 'Ya has agregado una cuenta con este alias.'})
+
+        //Actualizamos el usuario solo donde el id del favorito coincida con el que obtuvimos
+
+        const updateFavorite = await UserSchema.findOneAndUpdate(
+            {_id: findUser._id , 'favorites._id':  idFavorite},
+            {
+                $set: {
+                    'favorites.$.alias': alias,
+                    'favorites.$.number_Account': number_Account,
+                    'favorites.$.typeAccount': number_AccountExists.typeAccount,
+                }
+            },
+            {new: true}
+        )
+
+        if( !updateFavorite ) 
+        return res.status(400).send({message: 'No se ha podido actualizar la cuenta de favoritos.'});
+
+        return res.status(200).send({message: 'Cuenta de favoritos actualizada correctamente.', updateFavorite});
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
+    }
+}
+
+exports.deleteOwnFavorite = async(req, res) => {
+    try {
+        
+        const findUser = await UserSchema.findById(req.user._id)
+        if(!findUser) return res.status(404).send({message: 'No se ha encontrado su usuario en la base de datos'});
+
+        const favoriteFind = findUser.favorites.filter( favorite => favorite.alias == req.body.alias );
+        if(favoriteFind.length == 0) return res.status(404).send({message: 'El alias no fue encontrado en el listado de favoritos.'})
+
+        const deleteFavorite = await UserSchema.findOneAndUpdate(
+            { _id: findUser._id , 'favorites.$.alias': req.body.alias },
+            { 
+                $pull: {
+                    favorites: {
+                        alias: req.body.alias
+                    }
+                }
+            },
+            {new: true}
+        )
+        if( !deleteFavorite ) return res.status(400).send({message: 'No se ha eliminado al favorito.'})
+
+        return res.status(200).send({message: 'Favorito eliminado correctamente.',deleteFavorite});
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 

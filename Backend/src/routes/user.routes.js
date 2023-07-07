@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite, viewOwnFavorites} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite, viewOwnFavorites, updateOwnFavorite, deleteOwnFavorite} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -94,5 +94,22 @@ api.put('/addFavorite', [
 api.get('/viewOwnFavorites', [
     validateJWT
 ], viewOwnFavorites)
+
+//Actualizar una cuenta de mis favoritos
+api.put('/updateOwnFavorite', [
+    validateJWT,
+    check('idFavorite', 'El parametro "idFavorite" es necesario para actualizar la cuenta de favoritos.').not().isEmpty(),
+    check('alias', 'El parametro "alias" es necesario para actualizar la cuenta de favoritos.').not().isEmpty(),
+    check('number_Account', 'El parametro "number_Account" es necesario para actualizar la cuenta de favoritos.').not().isEmpty(),
+    check('typeAccount', 'El parametro "typeAccount" es necesario para actualizar la cuenta de favoritos.').not().isEmpty(),
+    validateParams
+], updateOwnFavorite)
+
+//Eliminar una cuenta de mis favoritos por medio del alias
+api.delete('/deleteOwnFavorite',[
+    validateJWT,
+    check('alias', 'El parametro "alias" es necesrio para eliminar el favorito.').not().isEmpty(),
+    validateParams
+], deleteOwnFavorite)
 
 module.exports = api

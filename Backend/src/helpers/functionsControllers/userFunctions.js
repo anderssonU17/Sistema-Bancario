@@ -63,8 +63,6 @@ exports.convertCurrencies = async(base, rate, quantity)=>{
     let response = await axios.get(`https://api.exchangerate-api.com/v4/latest/${base}`);
 
     response = response.data.rates[rate];
-    console.log(`Lo que nos respondio el conversor de ${base} a ${rate}`);
-    console.log(response);
 
     return parseFloat(response) * parseFloat(quantity)
 
@@ -79,8 +77,6 @@ exports.checkSalaryNeeded = async(base, quantity) => {
   try {
     
     let response = await this.convertCurrencies(base, 'GTQ', quantity)
-    console.log(`Conviertiendo ${base} ${quantity} a quetzales`);
-    console.log(response);
 
     if(response < 100){
       return false;
@@ -91,4 +87,12 @@ exports.checkSalaryNeeded = async(base, quantity) => {
   } catch (error) {
     console.error(error);
   }
+}
+
+//Comprobar que el alias no sea uno repetido, y si es repetido solo va ser agregado al arreglo si el id no es el mismo
+exports.checkAliasRepeted = (favorites , alias , idFavorite) =>{
+  const repetedAlias = favorites.filter( favorito => favorito.alias == alias)
+  
+  if( repetedAlias.length && JSON.stringify(repetedAlias[0]._id) != `"${idFavorite}"` ) return repetedAlias[0]
+  else  return false
 }
