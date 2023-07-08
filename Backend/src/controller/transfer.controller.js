@@ -13,7 +13,7 @@ exports.createTransfer = async(req, res)=> {
 
         //Comprobar que ambas cuentas existan
         const userSender = await userExists(req.user._id)
-        if(userSender) return res.status(404).send({message: 'Su cuenta no existe en la base de datos.'});
+        if(!userSender) return res.status(404).send({message: 'Su cuenta no existe en la base de datos.'});
 
         const accoundBeneficiary = await accountExist(beneficiary)
         if(!accoundBeneficiary) return res.status(404).send({message: 'No se encontro la cuenta del beneficiario en la base de datos.'})
@@ -25,17 +25,20 @@ exports.createTransfer = async(req, res)=> {
         if( ! checkAmountTransfer( currency , amount ) ) return res.status(400).send({message: 'El monto de la transferencia sobre pasa lo permitido por el banco.'})
 
         //Comprobar que la cuenta remitente tenga el saldo suficiente
-        if( ! checkSenderBalance( userSender.currency , userSender.accountBalance , amount , currency ) ) 
+        if( ! await checkSenderBalance( userSender.currency , userSender.accountBalance , amount , currency ) ) 
         return res.status(400).send({message: 'El monto de la transferencia supera el saldo de la cuenta del beneficiario.'})
 
         //***********Actualizamos cada una de las cuentas.
         // Se calcula el nuevo saldo de la cuenta del remitente
         let newAccountBalanceSender = await calculateAmountBalance(userSender.currency , amount , currency)
-        newAccountBalanceSender = userSender.accoundBalance - newAccountBalanceSender
+        newAccountBalanceSender = userSender.accountBalance - newAccountBalanceSender
 
         const newUserSender = await User.findOneAndUpdate( 
             {_id: userSender._id},
-            { accoundBalance: newAccountBalance },
+            { 
+                accountBalance: newAccountBalanceSender ,
+                $inc: { numberOfTransactions: 1},
+            },
             {new: true}
             )
 
@@ -45,14 +48,25 @@ exports.createTransfer = async(req, res)=> {
 
         const newAccoundBeneficiary = await User.findOneAndUpdate(
             {_id: accoundBeneficiary._id},
-            { accoundBalance: newAccoundBalanceBeneficiary },
+            { accountBalance: newAccoundBalanceBeneficiary },
             {new: true}
         )
 
         if( !newUserSender ) return res.status(404).send({message: 'No se pudo acutalizar el saldo de la cuenta del remitente.'})
-        if( !newAccoundBeneficiary ) return res.status(404).send({message: 'No se pudo acutalizar el saldo de la cuenta del beneficiario.'})
+        if( !newAccoundBeneficiary ) return res.status(404).send({message: 'No se pudo acutalizar el saldo de la cuenta del beneficiario.'});
 
-        return res.status(200).send({message: 'Se realizo la transfernecia correctamente.' , newUserSender , newAccoundBeneficiary});
+        //Crear la transferencia y gurdarla en la base de datos
+        const newTransfer = new Transfer({
+            beneficiary: accoundBeneficiary._id,
+            sender: userSender._id,
+            typeAccount: accoundBeneficiary.typeAccount,
+            amount: amount,
+            currency: currency,
+            movementType: typeAccount,
+        })
+
+
+        return res.status(200).send({message: 'Se realizo la transfernecia correctamente.' , newTransfer});
 
     } catch (error) {
         console.error(error);

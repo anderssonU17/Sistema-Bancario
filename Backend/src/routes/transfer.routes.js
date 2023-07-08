@@ -10,6 +10,7 @@ const { createTransfer } = require('../controller/transfer.controller')
 
 api.post('/transfer', [
     validateJWT,
+    check('movementType', 'El parametro "movementType" es necesario para realizar la transferencia.').not().isEmpty(),
     check('beneficiary', 'El parametro "beneficiary" es necesario para realizar la transferencia.').not().isEmpty(),
     check('typeAccount', 'El parametro "typeAccount" es necesario para realizar la transferencia.').not().isEmpty(),
     check('amount', 'El parametro "amount" es necesario para realizar la transferencia.').not().isEmpty(),
