@@ -25,7 +25,7 @@ exports.createTransfer = async(req, res)=> {
         if( ! checkAmountTransfer( currency , amount ) ) return res.status(400).send({message: 'El monto de la transferencia sobre pasa lo permitido por el banco.'})
 
         //Comprobar que la cuenta remitente tenga el saldo suficiente
-        if( ! await checkSenderBalance( userSender.currency , userSender.accountBalance , amount , currency ) ) 
+        if(  await checkSenderBalance( userSender.currency , userSender.accountBalance , amount , currency ) ) 
         return res.status(400).send({message: 'El monto de la transferencia supera el saldo de la cuenta del beneficiario.'})
 
         //***********Actualizamos cada una de las cuentas.

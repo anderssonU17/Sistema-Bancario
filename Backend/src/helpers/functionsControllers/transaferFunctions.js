@@ -37,8 +37,8 @@ exports.checkSenderBalance = async( currencySender , accountBalance , amount , c
         console.log("amountSenderCurrency", amountSenderCurrency)
         console.log("accountBalance", accountBalance)
         console.log(amountSenderCurrency > accountBalance)
-        if( amountSenderCurrency >  accountBalance) return false
-        else return true
+        
+        return amountSenderCurrency >  accountBalance
 
     } catch (error) {
         console.error(error);
