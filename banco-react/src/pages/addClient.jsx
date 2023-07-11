@@ -6,7 +6,7 @@ export const AddClient = () => {
   return (
     <>
         <h1>Agregar cliente</h1>
-        <div className="container" style={{marginTop: "5%"}}>
+        <div className="container" style={{marginTop: "3%"}}>
 
             <div className="formContainer">
                 <form>
