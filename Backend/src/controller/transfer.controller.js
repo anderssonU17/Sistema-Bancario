@@ -59,3 +59,14 @@ exports.createTransfer = async(req, res)=> {
         return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})        
     }
 }
+
+exports.createDepositi = (req, res)=> {
+    try {
+        
+        
+
+    } catch (error) {
+        console.error(object);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})        
+    }
+}
