@@ -76,6 +76,8 @@ exports.convertCurrencies = async(base, rate, quantity)=>{
 
     response = response.data.rates[rate];
 
+    console.log(response);
+
     return parseFloat(response) * parseFloat(quantity)
 
   } catch (error) {
@@ -93,7 +95,7 @@ exports.checkSalaryNeeded = async(base, quantity) => {
     if(response < 100){
       return false;
     }else{
-      return response;
+      return parseFloat(response);
     }
     
   } catch (error) {

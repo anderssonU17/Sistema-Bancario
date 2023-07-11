@@ -51,11 +51,9 @@ exports.calculateAmountBalance = async( currencyAccount , amountTransfer , curre
         
         const newAmountBalance = await convertCurrencies( currencyTransfer , currencyAccount , amountTransfer )
 
-        return newAmountBalance
+        return parseFloat(newAmountBalance)
 
     } catch (error) {
         console.error(error);
     }
 }
-
-exports.cal

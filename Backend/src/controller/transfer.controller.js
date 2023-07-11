@@ -1,7 +1,7 @@
 'use strict'
 
 const { accountExist, checkAmountTransfer, checkSenderBalance, calculateSenderBalance, calculateAmountBalance } = require('../helpers/functionsControllers/transaferFunctions')
-const { userExists } = require('../helpers/functionsControllers/userFunctions')
+const { userExists, convertCurrencies } = require('../helpers/functionsControllers/userFunctions')
 const Transfer = require('../models/transfer.model')
 const User = require('../models/user.model')
 
@@ -10,6 +10,11 @@ exports.createTransfer = async(req, res)=> {
         
         //Obtener los datos de quien envia y de quien recibe
         const { beneficiary, typeAccount , amount , currency } = req.body
+
+        //Comprobar qeu el monto de la transferencia sea mayor a cero.
+        if(amount < 1) return res.status(400).send({message: 'El deposito debe tener un monto mayor a 0.'})
+        //Comprobar que la transferenia que se quiere hacer no pase los Q1000.00
+        if( ! checkAmountTransfer( currency , amount ) ) return res.status(400).send({message: 'El monto de la transferencia sobre pasa lo permitido por el banco.'})
 
         //Comprobar que ambas cuentas existan
         const userSender = await userExists(req.user._id)
@@ -20,9 +25,6 @@ exports.createTransfer = async(req, res)=> {
 
         //Comprobar que el tipo de cuenta que se haya enviado por parte del remitente sea el mismo
         if( typeAccount != accoundBeneficiary.typeAccount ) return res.status(400).send({message: 'Error al enviar los datos de la cuenta beneficiaria.'})
-
-        //Comprobar que la transferenia que se quiere hacer no pase los Q1000.00
-        if( ! checkAmountTransfer( currency , amount ) ) return res.status(400).send({message: 'El monto de la transferencia sobre pasa lo permitido por el banco.'})
 
         //Comprobar que la cuenta remitente tenga el saldo suficiente
         if(  await checkSenderBalance( userSender.currency , userSender.accountBalance , amount , currency ) ) 
@@ -44,11 +46,14 @@ exports.createTransfer = async(req, res)=> {
 
         // Se calcula el nuevo saldo del beneficiario
         let newAccoundBalanceBeneficiary = await calculateAmountBalance( accoundBeneficiary.currency , amount , currency )
-        newAccoundBalanceBeneficiary = accoundBeneficiary.accountBalance + newAccoundBalanceBeneficiary
+        newAccoundBalanceBeneficiary = parseFloat(accoundBeneficiary.accountBalance) + parseFloat(newAccoundBalanceBeneficiary);
 
         const newAccoundBeneficiary = await User.findOneAndUpdate(
             {_id: accoundBeneficiary._id},
-            { accountBalance: newAccoundBalanceBeneficiary },
+            { 
+                accountBalance: newAccoundBalanceBeneficiary,
+                $inc: { numberOfTransactions: 1},
+            },
             {new: true}
         )
 
@@ -56,15 +61,16 @@ exports.createTransfer = async(req, res)=> {
         if( !newAccoundBeneficiary ) return res.status(404).send({message: 'No se pudo acutalizar el saldo de la cuenta del beneficiario.'});
 
         //Crear la transferencia y gurdarla en la base de datos
-        const newTransfer = new Transfer({
-            beneficiary: accoundBeneficiary._id,
-            sender: userSender._id,
-            typeAccount: accoundBeneficiary.typeAccount,
+        let newTransfer = new Transfer({
+            movementType: req.body.movementType,
+            beneficiary: accoundBeneficiary.number_Account,
             amount: amount,
             currency: currency,
-            movementType: typeAccount,
+            sender: userSender.number_Account,
+            typeAccount: accoundBeneficiary.typeAccount,
         })
 
+        newTransfer = await newTransfer.save()
 
         return res.status(200).send({message: 'Se realizo la transfernecia correctamente.' , newTransfer});
 
@@ -74,10 +80,54 @@ exports.createTransfer = async(req, res)=> {
     }
 }
 
-exports.createDepositi = (req, res)=> {
+exports.createDeposit = async(req, res)=> {
     try {
         
-        
+        let {beneficiary, typeAccount, amount, currency} = req.body;
+
+        //Comprobar que el deposito no pase los Q10000.00, diez mil quetzales. Y que sea mayor a 0
+        if(amount < 1) return res.status(400).send({message: 'No se ha podido '})
+
+        if( ! await checkAmountTransfer(currency, amount) ) return res.status(400).send({message: 'El monto del deposito sobrepasa lo permitido por el banco.'})
+
+        //Comprobar que la cuenta del beneficiario exista
+        beneficiary = await User.findOne({number_Account: beneficiary})
+        if( !beneficiary ) return res.status(404).send({message: 'No se ha encontrado el beneficiario en al base de datos.'});
+
+        //Comprobar que el tipo de cuenta enviado y el correspondiente de la cuenta encontrada (beneficiario) sean iguales
+        if( beneficiary.typeAccount != typeAccount ) return res.status(400).send({message: 'El tipo de cuenta no es correcto.'})
+
+        //Si en dado caso el tipo de moneda del deposito es diferente al tipo de moneda que tiene el usuario, se hara una conversion.
+        if( currency != beneficiary.currency ){
+            amount = await convertCurrencies(currency, beneficiary.currency, amount)
+        }
+
+        //Agregar el deposito al beneficiario
+        const updateBeneficiary = await User.findOneAndUpdate(
+            {number_Account: beneficiary.number_Account},
+            {
+                $inc: {
+                        numberOfTransactions: 1,
+                        accountBalance: amount
+                    },
+            },
+            {new: true}
+        )
+
+        if(!updateBeneficiary) return res.status(404).send({message: 'No fue posible actualizar la cuenta del beneficiario.'})
+
+        //Crear la transferencia y gurdarla en la base de datos
+        let newTransfer = new Transfer({
+            movementType: 'DEPOSITO',
+            beneficiary: beneficiary.number_Account,
+            amount: req.body.amount,
+            currency: req.body.currency,
+            typeAccount: beneficiary.typeAccount,
+        })
+
+        newTransfer = await newTransfer.save()
+
+        return res.status(200).send({message: 'Se realizo el deposito correctamente.', newTransfer})
 
     } catch (error) {
         console.error(object);

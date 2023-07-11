@@ -25,7 +25,7 @@ const TransferSchema = new Schema({
     sender: {
         //Se retira el necesario por si lo que se hace es un deposito
         // require: true, 
-        type: Number
+        type: String
     },
     beneficiary: {
         require: true,
