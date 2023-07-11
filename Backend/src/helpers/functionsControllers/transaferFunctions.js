@@ -33,9 +33,12 @@ exports.checkSenderBalance = async( currencySender , accountBalance , amount , c
         
         //Cambiar el monto a lo equivalente en la moneda del remitente
         const amountSenderCurrency = await convertCurrencies( currency , currencySender , amount )
-
-        if( amountSenderCurrency >  accountBalance) return false
-        return true
+        
+        console.log("amountSenderCurrency", amountSenderCurrency)
+        console.log("accountBalance", accountBalance)
+        console.log(amountSenderCurrency > accountBalance)
+        
+        return amountSenderCurrency >  accountBalance
 
     } catch (error) {
         console.error(error);
