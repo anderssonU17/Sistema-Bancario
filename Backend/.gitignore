@@ -160,6 +160,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+### dotenv ###
 .env
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,node
