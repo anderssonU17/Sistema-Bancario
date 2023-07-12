@@ -1,3 +1,4 @@
+import React from 'react';
 import '../../assets/css/login.css'
 
 export const LoginPage = () => {
@@ -5,7 +6,7 @@ export const LoginPage = () => {
 
   return (
     <>
-   <link rel="stylesheet" href="Banco.css" />
+   <link rel="stylesheet" href="" />
    <section>
      <div className="form-box">
        <div className="form-value">
