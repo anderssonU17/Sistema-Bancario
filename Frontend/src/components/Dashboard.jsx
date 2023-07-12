@@ -15,7 +15,7 @@ export const Dashboard = () => {
     setSidebarLocked(!isSidebarLocked);
     const sidebar = document.querySelector(".sidebar");
     const sidebarLockBtn = document.querySelector("#lock-icon");
-  
+
     sidebar.classList.toggle("locked");
     if (!sidebar.classList.contains("locked")) {
       sidebar.classList.add("hoverable");
@@ -27,16 +27,16 @@ export const Dashboard = () => {
   };
 
   const showSidebar = () => {
-    if (!isSidebarLocked) {
+    if (!isSidebarLocked && isSidebarOpen) {
       const sidebar = document.querySelector(".sidebar");
-      if (sidebar.classList.contains("hoverable")) {
+      if (sidebar.classList.contains("close")) {
         sidebar.classList.remove("close");
       }
     }
   };
 
   const hideSidebar = () => {
-    if (!isSidebarLocked) {
+    if (!isSidebarLocked && isSidebarOpen) {
       const sidebar = document.querySelector(".sidebar");
       if (!sidebar.classList.contains("close")) {
         sidebar.classList.add("close");
@@ -46,17 +46,27 @@ export const Dashboard = () => {
   
   return (
     <>
-      <nav className={`sidebar ${isSidebarOpen ? '' : 'close'}`}
-      onMouseEnter={showSidebar}
-      onMouseLeave={hideSidebar}
+      <nav
+        className={`sidebar ${isSidebarOpen ? '' : 'close'}`}
+        onMouseEnter={showSidebar}
+        onMouseLeave={hideSidebar}
       >
         <div className="logo_items flex">
           <span className="nav_image">
             <img src={logo} alt="logo_img" />
           </span>
           <span className="logo_name">Bancario</span>
-          <i className="bx bx-lock-alt" id="lock-icon" title="Unlock Sidebar" onClick={toggleLock}></i>
-          <i className="bx bx-x" id="sidebar-close" onClick={toggleSidebar}></i>
+          <i
+            className={`bx ${isSidebarLocked ? 'bx-lock-alt' : 'bx-lock-open-alt'}`}
+            id="lock-icon"
+            title="Toggle Lock"
+            onClick={toggleLock}
+          ></i>
+          <i
+            className="bx bx-x"
+            id="sidebar-close"
+            onClick={toggleSidebar}
+          ></i>
         </div>
 
         <div className="menu_container">

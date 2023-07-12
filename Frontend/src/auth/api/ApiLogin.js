@@ -3,9 +3,9 @@ import Swal from "sweetalert2"
 
 const URL = "http://localhost:3005/api/";
 
-export const login = async (email, password) => {
+export const login = async (userName, password) => {
     try{
-        const response = await axios.post(`${URL}login`, {email, password});
+        const response = await axios.post(`${URL}login`, {userName, password});
         const token = response.data.token;
 
         token && localStorage.setItem("token", token);
