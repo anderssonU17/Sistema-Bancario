@@ -423,6 +423,7 @@ exports.login = async (req, res)=>{
 
     } catch (error) {
         console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -451,6 +452,7 @@ exports.adminDefault = async() =>{
         _adminDefault.workName = 'Administrador de banco';
         _adminDefault.monthlyIncome = 101;
         _adminDefault.accountBalance = 101;
+        _adminDefault.currency = 'USD';
 
         _adminDefault = await _adminDefault.save()
 
@@ -458,5 +460,24 @@ exports.adminDefault = async() =>{
 
     } catch (error) {
         console.error(error);
+    }
+}
+
+exports.checkRolAdmin = async(req, res) => {
+    try {
+        
+        const idUser = req.user._id
+        const userFind = await UserSchema.findById(idUser)
+
+        if(userFind.rol == 'ADMINISTRADOR'){
+            return res.status(200).send({message: 'Usuario de tipo administrador', ok: true})
+        }else{
+            return res.status(200).send({message: 'Usuairo de tipo cliente', ok: false})
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }

@@ -1,0 +1,77 @@
+.start-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 26px;
+  place-content: center;
+  width: calc(100vw - 270px);
+  margin: 15px;
+}
+
+/* Estilo de las cards */
+.card-user {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  background-color: #51a7e0;
+  border-radius: 15px;
+  padding: 10px;
+  color: #f0f0f0;
+  width: 240px;
+}
+.card-user div {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+#subtitle {
+  color: rgba(226, 226, 226, 0.849);
+}
+
+.card-user h5 {
+  width: 100px;
+}
+.card-user h5 {
+  overflow-wrap: break-word;
+}
+
+.btn-section{
+    position: initial;
+    display: flex;
+    justify-content: space-around;
+    margin-top: auto;
+    bottom: 0;
+}
+
+.btn-section button {
+    border-radius: 4px;
+    padding: 8px;
+    transition: ease-in-out 0.2s;
+}
+
+#btn-eliminar{
+    background-color: tomato;
+    color: white;
+    border: 0;
+    
+}
+.btn-section button:hover {
+    transform: scale(1.2);
+}
+.btn-section button:disabled {
+    background-color: gray;
+}
+#btn-editar{
+    background-color: orange;
+    color: white;
+    border: 0;
+}
+
+
+
+@media (max-width: 640px) {
+  .card-user {
+    grid-template-columns: repeat(auto-fill, 140px);
+    margin-left: 0;
+  }
+}
