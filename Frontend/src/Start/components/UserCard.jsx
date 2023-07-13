@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "../../assets/css/startAdmin.css";
 import { alertAdmin } from "../api/startCheckRol";
 import { confirmDeleteUser } from "../api/startAdmin";
+import { updateUserModal } from "../functions/updateuserModal";
 
 export const UserCard = (props) => {
 
@@ -14,7 +15,7 @@ export const UserCard = (props) => {
           confirmDeleteUser(props.user._id, props.setUsers)
           break;
         case 'edit':
-          
+          updateUserModal(props.user, props.setUsers)
           break;
       }
     }
