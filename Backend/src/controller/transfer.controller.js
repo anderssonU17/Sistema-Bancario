@@ -134,3 +134,24 @@ exports.createDeposit = async(req, res)=> {
         return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})        
     }
 }
+
+exports.getMovementHistory = async (req, res) => {
+    try {
+      // Obtener el ID del usuario autenticado desde el req.user proporcionado por el middleware validateJWT
+      const userId = req.user._id;
+  
+      // Comprobar que el usuario exista en la base de datos
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'Usuario no encontrado en la base de datos.' });
+      }
+  
+      // Obtener el historial de movimientos del usuario
+      const movements = await Transfer.find({ beneficiary: userId });
+  
+      return res.status(200).json({ message: 'Historial de movimientos obtenido exitosamente.', movements });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error en el servidor al obtener el historial de movimientos.' });
+    }
+  };

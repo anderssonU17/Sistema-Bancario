@@ -1,0 +1,16 @@
+.container-start{
+    display: flex;
+    /* justify-content: space-around; */
+}
+#start-content{
+    margin-left: 70px;
+}
+
+@media (max-width: 640px) {
+    .container-start{
+        justify-content: initial;
+    }
+    #start-content {
+        margin-left: 140px;
+    }
+}

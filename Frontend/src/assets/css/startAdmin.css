@@ -1,0 +1,102 @@
+.start-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 26px;
+  place-content: center;
+  width: calc(100vw - 270px);
+  margin: 10px;
+}
+
+/* Estilo de las cards */
+.card-user {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  background-color: #51a7e0;
+  border-radius: 15px;
+  padding: 10px;
+  color: #f0f0f0;
+  width: 240px;
+}
+.card-user h5{
+  font-size: 15px;
+}
+.card-user div {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+#subtitle {
+  color: rgba(226, 226, 226, 0.849);
+}
+
+.card-user h5 {
+  width: 100px;
+}
+.card-user h5 {
+  overflow-wrap: break-word;
+}
+/* Botones bajos */
+.btn-section {
+  position: initial;
+  display: flex;
+  justify-content: space-around;
+  bottom: 0;
+}
+
+.btn-section button {
+  border-radius: 4px;
+  padding: 4px;
+  margin: 12px;
+  transition: ease-in-out 0.2s;
+}
+
+#btn-eliminar {
+  background-color: tomato;
+  color: white;
+  border: 0;
+}
+.btn-section button:hover {
+  transform: scale(1.2);
+}
+.btn-section button:disabled {
+  background-color: gray;
+}
+#btn-editar {
+  background-color: orange;
+  color: white;
+  border: 0;
+}
+/* Agregar usuairo */
+.button-addUser-container {
+  width: calc(100vw - 270px);
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: right;
+}
+
+.button-addUser {
+  position: fixed;
+  width: 150px;
+  background-color: rgb(0, 81, 255);
+  color: white;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 15px -150px 40px;
+  transition: ease-in-out 0.2s;
+}
+
+.button-addUser:hover {
+  background-color: #002fff;
+  color: rgba(218, 218, 218, 0.986);
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .card-user {
+    grid-template-columns: repeat(auto-fill, 140px);
+    margin-left: 0;
+  }
+}

@@ -6,7 +6,7 @@ const { check } = require('express-validator')
 const {validateJWT} = require('../middlewares/validate-jwt')
 const { validateParams } = require('../middlewares/validate-params')
 
-const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite, viewOwnFavorites, updateOwnFavorite, deleteOwnFavorite} = require('../controller/user.controller');
+const {createUser, login, viewAllUsers, updateUser, viewOwnUser, updateOwnUser, addFavorite, viewOwnFavorites, updateOwnFavorite, deleteOwnFavorite, checkRolAdmin, deleteUser} = require('../controller/user.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 const api = Router();
@@ -34,7 +34,7 @@ api.post('/add-user', [
     
     check('typeAccount', 'El parametro typeAccount es necesario para crear la cuenta').not().isEmpty(),
     
-    check('DPI', 'El parametro DPI debe tener 13 digitos para crear la cuenta').isLength({min: 13, max: 13}),
+    check('DPI', 'El parametro DPI debe tener 13 digitos para crear la cuenta').isLength({min: 13}),
     
     check('address', 'El parametro address es necesario para crear la cuenta').not().isEmpty(),
     
@@ -61,6 +61,14 @@ api.get('/allUsers', [
     validateJWT,
     administradorRol
 ], viewAllUsers)
+
+//Elimianr un usuairo por medio del id
+api.delete('/deleteUser', [
+    validateJWT,
+    administradorRol,
+    check('idUser', 'El parametro "idUser" es necesario para eliminar el usuario. ').not().isEmpty(),
+    validateParams
+], deleteUser)
 
 //Editar usuario por id (este se tiene que mandar en el body)
 api.put('/updateUser', [
@@ -111,5 +119,10 @@ api.delete('/deleteOwnFavorite',[
     check('alias', 'El parametro "alias" es necesrio para eliminar el favorito.').not().isEmpty(),
     validateParams
 ], deleteOwnFavorite)
+
+//Verificar rol admin por token
+api.post('/checkRolAdmin',[
+    validateJWT
+], checkRolAdmin)
 
 module.exports = api

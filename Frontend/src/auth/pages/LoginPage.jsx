@@ -18,9 +18,9 @@ export const LoginPage = () => {
         confirmButtonText: 'Ok',
       }).then(r => {
         if(r.isConfirmed){
-          window.location.href = "/dashboard";
+          window.location.href = "/start";
         }else {
-          window.location.href = "/dashboard";
+          window.location.href = "/start";
         }
       });
     }

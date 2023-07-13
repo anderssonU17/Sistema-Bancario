@@ -81,16 +81,16 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to="/start" className="link flex">
                     <i className="bx bx-world"></i>
                     <span>Clientes</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to="/stats" className="link flex">
                     <i className="bx bx-stats"></i>
                     <span>Estadisticas</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
 
@@ -125,7 +125,7 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <Link to="/profile" className="link flex" onClick={() => changeView('profile')}>
+                  <Link to="/profile" className="link flex">
                     <i className="bx bxs-user-circle"></i>
                     <span>Perfil</span>
                   </Link>

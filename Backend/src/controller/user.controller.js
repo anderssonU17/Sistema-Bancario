@@ -70,9 +70,13 @@ exports.updateUser = async(req, res)=>{
         if(findUser.rol == 'ADMINISTRADOR') return res.status(400).send({message: 'El usuario ingresado es un administrador, no se permiten cambios a este usuario.'})
 
         const checkUserName = await repeatUser(req.body.userName);
-        if( checkUserName && checkUserName._id !== findUser._id ) return res.status(400).send({message: 'El nombre de usuario ya esta en uso.'});
+        if( checkUserName && JSON.stringify(checkUserName._id) != JSON.stringify(findUser._id) ) return res.status(400).send({message: 'El nombre de usuario ya esta en uso.'});
 
         let updateUser = new UserSchema(req.body);
+        
+        console.log('Usuario recibido');
+        console.log(updateUser);
+
         delete updateUser._doc.number_Account;
         delete updateUser._doc._id
 
@@ -91,14 +95,15 @@ exports.updateUser = async(req, res)=>{
         if( updateUser.currency && findUser.currency !== updateUser.currency ){
 
             //Convertir su anterior sueldo a la moneda actual
+            console.log(`Salario anteriro: ${findUser.currency}`  + findUser.monthlyIncome);
             updateUser.monthlyIncome = await convertCurrencies( findUser.currency, updateUser.currency, findUser.monthlyIncome )
+            console.log(`Salario actualizado: ${updateUser.currency}`  + updateUser.monthlyIncome);
 
             //Convertir el dinero que tenia la cuenta a la nueva moneda
-            if(findUser.accountBalance > 0)
-            updateUser.accountBalance = await convertCurrencies( findUser.currency, updateUser.currency, findUser.accountBalance );
+            if(findUser.accountBalance > 0){
+                updateUser.accountBalance = await convertCurrencies( findUser.currency, updateUser.currency, findUser.accountBalance );
+            }
 
-        }else{
-            updateUser.accountBalance = findUser.accountBalance;
         }
 
         //Si se ha cambiado el salario se comprueba que gana mas de Q100.00
@@ -110,15 +115,26 @@ exports.updateUser = async(req, res)=>{
 
             let currencyToUse;
             req.body.currency ? currencyToUse = req.body.currency : currencyToUse = findUser.currency;
+
+            console.log('Moneda que se va usar: ' + currencyToUse);
+            console.log('Cantidad a evaluar: ' + updateUser.monthlyIncome);
                 
             const newMonthlyIncome = await checkSalaryNeeded(currencyToUse, updateUser.monthlyIncome);
             
-            if(!newMonthlyIncome) 
+            if(!newMonthlyIncome)
             return res.status(400).send({message: 'El nuevo salario del usuario no es mayor a Q100.00. No se posible actualizar la cuenta'});
 
+            console.log('Viene la moneda en la peticion' + req.body.currency);
+
+            req.body.currency != findUser.currency ?
+            updateUser.monthlyIncome = await convertCurrencies( findUser.currency, updateUser.currency, findUser.monthlyIncome )
+            :
             updateUser.monthlyIncome = req.body.monthlyIncome
 
         }
+
+        console.log('Usuario recibido depues del monthlyIncome');
+        console.log(updateUser);
 
         const userUpdatedSuccessfully = await UserSchema.findByIdAndUpdate(
             {_id: idUser}, 
@@ -129,6 +145,11 @@ exports.updateUser = async(req, res)=>{
         );        
 
         if(!userUpdatedSuccessfully) return res.status(400).send({message: 'No se ha podido actualizar el usuario.'});
+
+        
+        
+        console.log('Usuario actualizado');
+        console.log(userUpdatedSuccessfully);
 
         return res.status(200).send({message: 'Se ha actualizado el usuario correctamente.', updateUser});
 
@@ -423,6 +444,7 @@ exports.login = async (req, res)=>{
 
     } catch (error) {
         console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
 
@@ -451,6 +473,7 @@ exports.adminDefault = async() =>{
         _adminDefault.workName = 'Administrador de banco';
         _adminDefault.monthlyIncome = 101;
         _adminDefault.accountBalance = 101;
+        _adminDefault.currency = 'USD';
 
         _adminDefault = await _adminDefault.save()
 
@@ -458,5 +481,24 @@ exports.adminDefault = async() =>{
 
     } catch (error) {
         console.error(error);
+    }
+}
+
+exports.checkRolAdmin = async(req, res) => {
+    try {
+        
+        const idUser = req.user._id
+        const userFind = await UserSchema.findById(idUser)
+
+        if(userFind.rol == 'ADMINISTRADOR'){
+            return res.status(200).send({message: 'Usuario de tipo administrador', ok: true})
+        }else{
+            return res.status(200).send({message: 'Usuairo de tipo cliente', ok: false})
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})
     }
 }
