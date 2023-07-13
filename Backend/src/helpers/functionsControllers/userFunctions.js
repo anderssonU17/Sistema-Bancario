@@ -89,7 +89,6 @@ exports.checkSalaryNeeded = async(base, quantity) => {
   try {
     
     let response = await this.convertCurrencies(base, 'GTQ', quantity)
-    console.log(response);
     if(response < 100){
       return false;
     }else{

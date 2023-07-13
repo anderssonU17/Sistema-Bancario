@@ -5,21 +5,68 @@ import profile from '../assets/img/user.jpg';
 
 export const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarLocked, setSidebarLocked] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const toggleLock = () => {
+    setSidebarLocked(!isSidebarLocked);
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarLockBtn = document.querySelector("#lock-icon");
+
+    sidebar.classList.toggle("locked");
+    if (!sidebar.classList.contains("locked")) {
+      sidebar.classList.add("hoverable");
+      sidebarLockBtn.classList.replace("bx-lock-alt", "bx-lock-open-alt");
+    } else {
+      sidebar.classList.remove("hoverable");
+      sidebarLockBtn.classList.replace("bx-lock-open-alt", "bx-lock-alt");
+    }
+  };
+
+  const showSidebar = () => {
+    if (!isSidebarLocked && isSidebarOpen) {
+      const sidebar = document.querySelector(".sidebar");
+      if (sidebar.classList.contains("close")) {
+        sidebar.classList.remove("close");
+      }
+    }
+  };
+
+  const hideSidebar = () => {
+    if (!isSidebarLocked && isSidebarOpen) {
+      const sidebar = document.querySelector(".sidebar");
+      if (!sidebar.classList.contains("close")) {
+        sidebar.classList.add("close");
+      }
+    }
+  };
+  
   return (
     <>
-      <nav className={`sidebar ${isSidebarOpen ? '' : 'close'}`}>
+      <nav
+        className={`sidebar ${isSidebarOpen ? '' : 'close'}`}
+        onMouseEnter={showSidebar}
+        onMouseLeave={hideSidebar}
+      >
         <div className="logo_items flex">
           <span className="nav_image">
             <img src={logo} alt="logo_img" />
           </span>
           <span className="logo_name">Bancario</span>
-          <i className="bx bx-lock-alt" id="lock-icon" title="Unlock Sidebar" onClick={toggleSidebar}></i>
-          <i className="bx bx-x" id="sidebar-close" onClick={toggleSidebar}></i>
+          <i
+            className={`bx ${isSidebarLocked ? 'bx-lock-alt' : 'bx-lock-open-alt'}`}
+            id="lock-icon"
+            title="Toggle Lock"
+            onClick={toggleLock}
+          ></i>
+          <i
+            className="bx bx-x"
+            id="sidebar-close"
+            onClick={toggleSidebar}
+          ></i>
         </div>
 
         <div className="menu_container">
@@ -31,13 +78,13 @@ export const Dashboard = () => {
               </div>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-home-alt"></i>
+                  <i className="bx bx-world"></i>
                   <span>Clientes</span>
                 </a>
               </li>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-grid-alt"></i>
+                  <i className="bx bx-stats"></i>
                   <span>Estadisticas</span>
                 </a>
               </li>
@@ -50,19 +97,19 @@ export const Dashboard = () => {
               </div>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bxs-magic-wand"></i>
+                  <i className="bx bx-credit-card"></i>
                   <span>Transacciones</span>
                 </a>
               </li>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-folder"></i>
+                  <i className="bx bxs-badge-dollar"></i>
                   <span>Divisas</span>
                 </a>
               </li>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-cloud-upload"></i>
+                  <i className="bx bx-history"></i>
                   <span>Historial</span>
                 </a>
               </li>
@@ -75,7 +122,7 @@ export const Dashboard = () => {
               </div>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-flag"></i>
+                  <i className="bx bxs-user-circle"></i>
                   <span>Perfil</span>
                 </a>
               </li>
@@ -87,7 +134,7 @@ export const Dashboard = () => {
               </li>
               <li className="item">
                 <a href="#" className="link flex">
-                  <i className="bx bx-cog"></i>
+                  <i className="bx bx-log-out"></i>
                   <span>Cerrar Sesion</span>
                 </a>
               </li>
