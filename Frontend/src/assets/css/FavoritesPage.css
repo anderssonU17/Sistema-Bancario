@@ -1,0 +1,69 @@
+.letrita{
+    color: black;
+}
+
+.favorites-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .favorites-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .favorite-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .favorite-icon {
+    margin-right: 10px;
+    color: gold;
+  }
+  
+  .favorite-alias {
+    flex-grow: 1;
+  }
+  
+  .delete-favorite-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-favorite-form {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .add-favorite-form input {
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .add-favorite-form button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-favorite-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

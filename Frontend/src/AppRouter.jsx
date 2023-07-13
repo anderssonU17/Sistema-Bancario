@@ -6,6 +6,7 @@ import { LoginPage } from './auth/pages/LoginPage';
 import { UserPage } from './user/pages/UserPage';
 import { Start } from './Start/Pages/Start';
 import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
+import { FavoritesPage } from './favorites/pages/FavoritesPage';
 
 export const AppRouter = () => {
 
@@ -58,6 +59,17 @@ export const AppRouter = () => {
       element={
         isUserAuthenticated() ? (
           <ActiveAccounts/>
+        ) : (
+          <LoginPage/>
+        )
+      }
+      />
+
+    <Route
+      path='/favorites'
+      element={
+        isUserAuthenticated() ? (
+          <FavoritesPage/>
         ) : (
           <LoginPage/>
         )

@@ -131,11 +131,12 @@ export const Dashboard = () => {
                   </Link>
                 </li>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to="/favorites" className="link flex">
                     <i className="bx bx-award"></i>
                     <span>Favoritos</span>
-                  </a>
+                  </Link>
                 </li>
+
                 <li className="item">
                   <Link to="/" className="link flex" onClick={() => cerrarSesion()}>
                     <i className="bx bx-log-out"></i>
