@@ -65,13 +65,14 @@ const checkParams = (user) => {
 function checkObjectAttributesNotEmpty(obj) {
   for (let key in obj) {
     if (!obj[key]) {
-      if (key === "DPI" && obj[key].length !== 13) {
+      if (key === "DPI" && obj[key].length < 13) {
         Swal.fire({
           title: "Error.",
-          text: "El DPI debe tener 13 dígitos",
+          text: "El DPI debe tener al menos 13 dígitos",
           icon: "error",
           confirmButtonText: "ok",
         });
+        return false;
       } else if (key === "password" && obj[key].length < 6) {
         Swal.fire({
           title: "Error.",
@@ -116,9 +117,27 @@ const html = (oldUser) => {
   <br/>
   <label class="swal2-label">Tipo de cuenta<label/>
   <br/>
-  <input id="typeAccount" class="swal2-input" placeholder="typeAccount" value="${
-    oldUser.typeAccount || ""
-  }">
+  <select id="typeAccount" class="swal2-select">
+    <option value="" >Seleccione una opción</option>
+    <option value="Monetaria" ${
+      oldUser.typeAccount === "Monetaria" ? "selected" : ""
+    } >Monetaria</option>
+    <option value="Cuenta corriente" ${
+      oldUser.typeAccount === "Cuenta corriente" ? "selected" : ""
+    } >Cuenta corriente</option>
+    <option value="Ahorro" ${
+      oldUser.typeAccount === "Ahorro" ? "selected" : ""
+    } >Ahorro</option>
+    <option value="Depósito" ${
+      oldUser.typeAccount === "Depósito" ? "selected" : ""
+    } >Depósito</option>
+    <option value="Nómina" ${
+      oldUser.typeAccount === "Nómina" ? "selected" : ""
+    } >Nómina</option>
+    <option value="Inversión" ${
+      oldUser.typeAccount === "Inversión" ? "selected" : ""
+    } >Inversión</option>
+  </select>
   <br/>
   <label class="swal2-label">DPI<label/>
   <br/>

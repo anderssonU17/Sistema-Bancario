@@ -1,29 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Dashboard } from "../../components/Dashboard";
 
-import '../../assets/css/start.css'
+import "../../assets/css/start.css";
 
 import { checkRol } from "../api/startCheckRol";
 import { StartAdmin } from "./StartAdmin";
 import { StartClient } from "./StartClient";
+import { isUserAuthenticated } from "../../auth/helpers/LoginHelper";
+import { Navigate } from "react-router-dom";
 
 export const Start = () => {
   const [admin, setAdmin] = useState(null);
 
-  
   useEffect(() => {
-    localStorage.setItem('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1SWQiOiI2NDkyMjM0YzU3NGI1MjY5YzkyYjViOTIiLCJ1c2VybmFtZSI6IkFETUlOQiIsImVtYWlsIjoiQURNSU5CQGdtYWlsLmNvbSIsImlhdCI6MTY4OTEzNzExMywiZXhwIjoxNjg5Mzk2MzEzfQ.o4_Shl5rZAZG1mFFZ7NDu8MbYlxVX6jYIAdq1LjN1UI")
     const rol = async () => {
-        //En esta parte, cuando ya se tenga el verdadero login se enviara el token qeu este guardado en el localstorage
-      await checkRol(
-        localStorage.getItem('token')
-      ).then((response) => {
-        setAdmin(response)
+
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        return <Navigate to="/login" />;
+      }
+
+      await checkRol(token).then((response) => {
+        setAdmin(response);
       });
     };
 
-    rol()
-
+    rol();
   }, []);
 
   return (
@@ -31,8 +34,16 @@ export const Start = () => {
       <div className="container-start">
         <div>
           <Dashboard />
-        </div >
-        <div id="start-content" >{admin ? <StartAdmin/> : <StartClient/> }</div>
+        </div>
+        <div id="start-content">
+          {admin ? (
+            <StartAdmin />
+          ) : isUserAuthenticated() ? (
+            <StartClient />
+          ) : (
+            <Navigate to="/" />
+          )}
+        </div>
       </div>
     </>
   );

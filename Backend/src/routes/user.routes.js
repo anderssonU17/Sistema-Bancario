@@ -34,7 +34,7 @@ api.post('/add-user', [
     
     check('typeAccount', 'El parametro typeAccount es necesario para crear la cuenta').not().isEmpty(),
     
-    check('DPI', 'El parametro DPI debe tener 13 digitos para crear la cuenta').isLength({min: 13, max: 13}),
+    check('DPI', 'El parametro DPI debe tener 13 digitos para crear la cuenta').isLength({min: 13}),
     
     check('address', 'El parametro address es necesario para crear la cuenta').not().isEmpty(),
     

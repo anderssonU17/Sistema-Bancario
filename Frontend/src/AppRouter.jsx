@@ -9,7 +9,6 @@ import { LoginPage } from './auth/pages/LoginPage';
 export const AppRouter = () => {
   return (
     <Routes>
-      {/* <Route path='/' element={<Dashboard/>}/> */}
       <Route path='/start' element={<Start/>}/>
       <Route path='/' element={<LoginPage/>}/>
       <Route

@@ -76,13 +76,14 @@ function checkObjectAttributesNotEmpty(obj) {
   for (let key in obj) {
     if (!obj[key]) {
       
-      if(obj[key] == 'DPI' && obj[key].lenght < 13 && obj[key].lenght > 13) {
+      if(obj[key] == 'DPI' && obj[key].lenght < 13) {
         Swal.fire({
           title: "Error.",
-          text: 'El DPI debe tener 13 digitos',
+          text: 'El DPI debe tener al menos 13 digitos',
           icon: "error",
           confirmButtonText: 'ok',
         })
+        return false
       }else if(obj[key] == 'password' && obj[key].length < 6) {
         Swal.fire({
           title: "Error.",
@@ -122,7 +123,17 @@ const html =
   //typeAccount
   '<label class="swal2-label">Tipo de cuenta<label/>' +
   "<br/>" +
-  '<input id="typeAccount" class="swal2-input" placeholder="typeAccount">' +
+  `
+        <select id="typeAccount" class="swal2-select">
+          <option value="" >Seleccione una opción</option>
+          <option value="Monetaria ">Monetaria</option>
+          <option value="Cuenta corriente ">Cuenta corriente</option>
+          <option value="Ahorro">Ahorro</option>
+          <option value="Depósito ">Depósito </option>
+          <option value="Nómina ">Nómina </option>
+          <option value="Inversión ">Inversión </option>
+        </select>
+      ` +
   "<br/>" +
   //DPI
   '<label class="swal2-label">DPI<label/>' +
