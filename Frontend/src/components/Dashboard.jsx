@@ -83,16 +83,16 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to={'/start'} className="link flex" >
                     <i className="bx bx-world"></i>
                     <span>Clientes</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to={'/stadistics'} className="link flex" >
                     <i className="bx bx-stats"></i>
                     <span>Estadisticas</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
 
@@ -102,10 +102,10 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to={'/movements'} className="link flex" >
                     <i className="bx bx-credit-card"></i>
                     <span>Transacciones</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="item">
                   <a href="#" className="link flex">

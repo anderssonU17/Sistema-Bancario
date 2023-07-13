@@ -1,0 +1,35 @@
+.movement-container{
+    margin: 15px;
+    display: grid;
+    min-height: 90vh;
+    width: calc(99vw - 80px);
+    place-items: center;
+}
+
+.movement-container div{
+    border: 1px solid gray;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 16px;
+    width: 50%;
+}
+.movement-container div h3{
+    color: white;
+    background-color: #0044ff;
+    margin: -20px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 16px 16px 0 0;
+}
+.movement-container div button{
+    border-radius: 8px;
+    width: 170px;
+    margin-top: 20px;
+    transition: ease-in-out 0.2s;
+}
+.movement-container div button:hover{
+    background-color: white !important;
+    color: #0044ff;
+    border: 1px solid #0044ff;
+    transform: scale(0.9);
+}

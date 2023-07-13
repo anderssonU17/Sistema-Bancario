@@ -1,0 +1,79 @@
+.action-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title-action {
+  color: white;
+  background-color: #4879ff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.section-action {
+  margin: 10px;
+  width: 50vw;
+  display: flex;
+  justify-content: space-between;
+}
+.swal2-input {
+  display: block;
+  max-width: 500px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.swal2-input:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.swal2-select {
+  display: block;
+  width: 221px;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.swal2-select:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.swal2-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+/* Buttons actions */
+.button-action{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+.button-action button {
+    width: 230px;
+    border-radius: 8px;
+}
+.cancel-button{
+    background-color: tomato;
+}
+.conffirm-button{
+    background-color: rgb(169, 255, 30);
+}

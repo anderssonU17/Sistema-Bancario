@@ -18,8 +18,8 @@ exports.checkAmountTransfer = async( base , quantity ) => {
     try {
         
         let response = await convertCurrencies(base , 'GTQ' , quantity)
-
-        if( response > 1000 ) return false;
+        console.log(response);
+        if( response > 10000 ) return false;
         return response;
 
     } catch (error) {
