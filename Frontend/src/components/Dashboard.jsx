@@ -81,13 +81,13 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <Link to="/start" className="link flex">
+                  <Link to={'/start'} className="link flex" >
                     <i className="bx bx-world"></i>
                     <span>Clientes</span>
                   </Link>
                 </li>
                 <li className="item">
-                  <Link to="/stats" className="link flex">
+                  <Link to={'/stats'} className="link flex" >
                     <i className="bx bx-stats"></i>
                     <span>Estadisticas</span>
                   </Link>
@@ -100,10 +100,10 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to={'/movements'} className="link flex" >
                     <i className="bx bx-credit-card"></i>
                     <span>Transacciones</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="item">
                   <a href="#" className="link flex">

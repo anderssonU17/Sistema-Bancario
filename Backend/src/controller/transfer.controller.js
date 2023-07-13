@@ -95,6 +95,7 @@ exports.createDeposit = async(req, res)=> {
         if( !beneficiary ) return res.status(404).send({message: 'No se ha encontrado el beneficiario en al base de datos.'});
 
         //Comprobar que el tipo de cuenta enviado y el correspondiente de la cuenta encontrada (beneficiario) sean iguales
+        console.log(JSON.stringify(beneficiary.typeAccount)  == JSON.stringify(typeAccount));
         if( beneficiary.typeAccount != typeAccount ) return res.status(400).send({message: 'El tipo de cuenta no es correcto.'})
 
         //Si en dado caso el tipo de moneda del deposito es diferente al tipo de moneda que tiene el usuario, se hara una conversion.

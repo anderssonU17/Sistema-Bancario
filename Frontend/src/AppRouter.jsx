@@ -7,6 +7,10 @@ import { UserPage } from './user/pages/UserPage';
 import { Start } from './Start/Pages/Start';
 import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
 import { FavoritesPage } from './favorites/pages/FavoritesPage';
+import { Stadistics } from './Statistics/Pages/Stadistics';
+import { Movements } from './Movements/Pages/Movements';
+import { Transfers } from './Movements/Pages/Transfers';
+import { Deposits } from './Movements/Pages/Deposits';
 
 export const AppRouter = () => {
 
@@ -79,7 +83,36 @@ export const AppRouter = () => {
         path="/login"
         element={isUserAuthenticated() ? <Navigate to="/dashboard" replace={true} /> : <LoginPage />}
       />
-      <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
+      <Route
+        path="/Movements"
+        element={
+          isUserAuthenticated() ? (
+            <Movements/>
+          ) : (
+            <LoginPage />
+          )
+        }
+      />
+      <Route
+        path="/Movements/transfer"
+        element={
+          isUserAuthenticated() ? (
+            <Transfers/>
+          ) : (
+            <LoginPage />
+          )
+        }
+      />
+      <Route
+        path="/Movements/deposit"
+        element={
+          isUserAuthenticated() ? (
+            <Deposits/>
+          ) : (
+            <LoginPage />
+          )
+        }
+      />
     </Routes>
 </>
   );

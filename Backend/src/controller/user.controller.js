@@ -474,6 +474,7 @@ exports.adminDefault = async() =>{
         _adminDefault.monthlyIncome = 101;
         _adminDefault.accountBalance = 101;
         _adminDefault.currency = 'USD';
+        _adminDefault.typeAccount = 'Cuenta corriente';
 
         _adminDefault = await _adminDefault.save()
 
