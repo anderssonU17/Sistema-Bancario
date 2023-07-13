@@ -1599,6 +1599,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+mdb-ui-kit@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/mdb-ui-kit/-/mdb-ui-kit-6.4.0.tgz#55884815031e36e59de2dc3ee7e6fd4614bbef37"
+  integrity sha512-r5RC4QJs/k3ohk1Xd8MX/0Jh6BAUQ/X8fbOsNfJQUDqcwFBtEzaXYlZc/ltZlSWHXjwx0o4C4q8F+T0USm7t6g==
+
 mime-db@1.52.0:
   version "1.52.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"

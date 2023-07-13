@@ -18,6 +18,9 @@
   color: #f0f0f0;
   width: 240px;
 }
+.card-user h5{
+  font-size: 15px;
+}
 .card-user div {
   display: flex;
   flex-direction: row;
