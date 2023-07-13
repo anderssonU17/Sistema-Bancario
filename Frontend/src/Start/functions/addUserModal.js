@@ -6,7 +6,7 @@ let newUser;
 export const addUserModal = (setUsers) => {
   try {
     Swal.fire({
-      title: "Ingrese la información",
+      title: "Ingrese la información del nuevo usuario.",
       html: html,
       showCancelButton: true,
       confirmButtonText: "Guardar",

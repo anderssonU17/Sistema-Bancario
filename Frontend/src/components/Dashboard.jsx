@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import '../assets/css/Dashboard.css';
-import logo from '../assets/img/logo.png';
-import profile from '../assets/img/user.jpg';
+import React, { useState } from "react";
+import "../assets/css/Dashboard.css";
+import logo from "../assets/img/logo.png";
+import profile from "../assets/img/user.jpg";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -43,11 +44,11 @@ export const Dashboard = () => {
       }
     }
   };
-  
+
   return (
     <>
       <nav
-        className={`sidebar ${isSidebarOpen ? '' : 'close'}`}
+        className={`sidebar ${isSidebarOpen ? "" : "close"}`}
         onMouseEnter={showSidebar}
         onMouseLeave={hideSidebar}
       >
@@ -57,16 +58,14 @@ export const Dashboard = () => {
           </span>
           <span className="logo_name">Bancario</span>
           <i
-            className={`bx ${isSidebarLocked ? 'bx-lock-alt' : 'bx-lock-open-alt'}`}
+            className={`bx ${
+              isSidebarLocked ? "bx-lock-alt" : "bx-lock-open-alt"
+            }`}
             id="lock-icon"
             title="Toggle Lock"
             onClick={toggleLock}
           ></i>
-          <i
-            className="bx bx-x"
-            id="sidebar-close"
-            onClick={toggleSidebar}
-          ></i>
+          <i className="bx bx-x" id="sidebar-close" onClick={toggleSidebar}></i>
         </div>
 
         <div className="menu_container">
@@ -77,16 +76,16 @@ export const Dashboard = () => {
                 <span className="line"></span>
               </div>
               <li className="item">
-                <a href="#" className="link flex">
+                <Link to={"/start"} className="link flex">
                   <i className="bx bx-world"></i>
                   <span>Clientes</span>
-                </a>
+                </Link>
               </li>
               <li className="item">
-                <a href="#" className="link flex">
+                <Link to={"/stadistics"} className="link flex">
                   <i className="bx bx-stats"></i>
                   <span>Estadisticas</span>
-                </a>
+                </Link>
               </li>
             </ul>
 
