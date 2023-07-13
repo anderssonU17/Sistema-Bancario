@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     rol:{
         type: String,
         enum: ['CLIENTE', 'ADMINISTRADOR'],
-        require: true
+        require: true 
     },
     name:{
         require: true,

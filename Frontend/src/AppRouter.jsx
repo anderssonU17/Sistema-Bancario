@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { isUserAuthenticated } from './auth/helpers/LoginHelper';
 import { Dashboard } from './components/Dashboard';
 import { LoginPage } from './auth/pages/LoginPage';
@@ -9,10 +9,12 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route
-        path="/dashboard"
+        path="/dashboard/*"
         element={
           isUserAuthenticated() ? (
-            <Dashboard />
+            <Dashboard>
+              <Outlet />
+            </Dashboard>
           ) : (
             <Navigate to="/login" replace={true} />
           )
@@ -29,15 +31,10 @@ export const AppRouter = () => {
         }
       />
       <Route
-        path="/"
-        element={
-          isUserAuthenticated() ? (
-            <Navigate to="/dashboard" replace={true} />
-          ) : (
-            <LoginPage />
-          )
-        }
+        path="/login"
+        element={isUserAuthenticated() ? <Navigate to="/dashboard" replace={true} /> : <LoginPage />}
       />
+      <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
     </Routes>
   );
 };

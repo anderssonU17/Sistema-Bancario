@@ -1,20 +1,18 @@
-// Dashboard.jsx
 import React, { useState } from 'react';
 import '../assets/css/Dashboard.css';
-import logo from '../assets/img/logo.png';
+import logo from '../assets/img/logo.png'
 import profile from '../assets/img/user.jpg';
-import { Link } from 'react-router-dom';
-import { UserPage } from '../user/pages/UserPage';
+import { Link, Outlet } from 'react-router-dom';
 
 export const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isSidebarLocked, setSidebarLocked] = useState(false);
 
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-};
 
+  const cerrarSesion = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/';
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -52,7 +50,7 @@ export const Dashboard = () => {
       }
     }
   };
-
+  
   return (
     <>
       <div className="dashboard">
@@ -127,7 +125,7 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <Link to="/profile" className="link flex">
+                  <Link to="/profile" className="link flex" onClick={() => changeView('profile')}>
                     <i className="bx bxs-user-circle"></i>
                     <span>Perfil</span>
                   </Link>
@@ -157,6 +155,9 @@ export const Dashboard = () => {
                 <span className="email">ejemplo@gmail.com</span>
               </div>
             </div>
+          </div>
+          <div className='main-content'>
+            <Outlet/>
           </div>
         </nav>
       </div>
