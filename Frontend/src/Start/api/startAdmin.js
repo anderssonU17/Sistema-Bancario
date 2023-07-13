@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const URL = "http://localhost:3005/api/";
+const URL = 'https://sistema-bancario-backend-nine.vercel.app/api/';
 
 //Obtener todos los usuarios de la base de datos
 export const getAllUser = async (token) => {
