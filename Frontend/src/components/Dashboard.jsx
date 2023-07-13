@@ -119,7 +119,7 @@ export const Dashboard = () => {
               ) : (
                 <ul className="menu_item">
                   <div className="menu_title flex">
-                    <span className="title">Usuairo</span>
+                    <span className="title">Usuario</span>
                     <span className="line"></span>
                   </div>
                   <li className="item">
@@ -143,13 +143,13 @@ export const Dashboard = () => {
                   </Link>
                 </li>
                 <li className="item">
-                  <a href="#" className="link flex">
+                  <Link to="/start" className="link flex">
                     <i className="bx bx-history"></i>
                     <span>Historial</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
-
+              
               <ul className="menu_item">
                 <div className="menu_title flex">
                   <span className="title">Ajustes</span>

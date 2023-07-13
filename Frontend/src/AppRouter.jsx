@@ -10,6 +10,7 @@ import { Movements } from './Movements/Pages/Movements';
 import { Transfers } from './Movements/Pages/Transfers';
 import { Deposits } from './Movements/Pages/Deposits';
 import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
+import { FavoritesPage } from './favorites/pages/FavoritesPage';
 
 export const AppRouter = () => {
 
@@ -94,6 +95,16 @@ export const AppRouter = () => {
             <Deposits/>
           ) : (
             <LoginPage />
+          )
+        }
+      />
+      <Route
+        path="/favorites"
+        element={
+          isUserAuthenticated() ? (
+            <FavoritesPage />
+          ) : (
+            <Navigate to="/login" replace={true} />
           )
         }
       />
