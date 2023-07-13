@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Dashboard } from "../../components/Dashboard";
 
 import "../../assets/css/start.css";
 

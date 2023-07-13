@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
-import '../assets/css/Dashboard.css';
-import logo from '../assets/img/logo.png'
-import profile from '../assets/img/user.jpg';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import "../assets/css/Dashboard.css";
+import logo from "../assets/img/logo.png";
+import profile from "../assets/img/user.jpg";
+import { Link, Outlet } from "react-router-dom";
+import { checkRolAdmin } from "../Statistics/helper/checkAdmin";
 
 export const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isSidebarLocked, setSidebarLocked] = useState(false);
 
+  //Comprobar rol de administrador
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    const adminCheck = async () => {
+      try {
+        const verfied = await checkRolAdmin();
+        setAdmin(verfied);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    adminCheck();
+  }, []);
 
   const cerrarSesion = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/';
+    localStorage.removeItem("token");
+    window.location.href = "/";
   };
 
   const toggleSidebar = () => {
@@ -20,42 +36,42 @@ export const Dashboard = () => {
 
   const toggleLock = () => {
     setSidebarLocked(!isSidebarLocked);
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarLockBtn = document.querySelector('#lock-icon');
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarLockBtn = document.querySelector("#lock-icon");
 
-    sidebar.classList.toggle('locked');
-    if (!sidebar.classList.contains('locked')) {
-      sidebar.classList.add('hoverable');
-      sidebarLockBtn.classList.replace('bx-lock-alt', 'bx-lock-open-alt');
+    sidebar.classList.toggle("locked");
+    if (!sidebar.classList.contains("locked")) {
+      sidebar.classList.add("hoverable");
+      sidebarLockBtn.classList.replace("bx-lock-alt", "bx-lock-open-alt");
     } else {
-      sidebar.classList.remove('hoverable');
-      sidebarLockBtn.classList.replace('bx-lock-open-alt', 'bx-lock-alt');
+      sidebar.classList.remove("hoverable");
+      sidebarLockBtn.classList.replace("bx-lock-open-alt", "bx-lock-alt");
     }
   };
 
   const showSidebar = () => {
     if (!isSidebarLocked && isSidebarOpen) {
-      const sidebar = document.querySelector('.sidebar');
-      if (sidebar.classList.contains('close')) {
-        sidebar.classList.remove('close');
+      const sidebar = document.querySelector(".sidebar");
+      if (sidebar.classList.contains("close")) {
+        sidebar.classList.remove("close");
       }
     }
   };
 
   const hideSidebar = () => {
     if (!isSidebarLocked && isSidebarOpen) {
-      const sidebar = document.querySelector('.sidebar');
-      if (!sidebar.classList.contains('close')) {
-        sidebar.classList.add('close');
+      const sidebar = document.querySelector(".sidebar");
+      if (!sidebar.classList.contains("close")) {
+        sidebar.classList.add("close");
       }
     }
   };
-  
+
   return (
     <>
       <div className="dashboard">
         <nav
-          className={`sidebar ${isSidebarOpen ? '' : 'close'}`}
+          className={`sidebar ${isSidebarOpen ? "" : "close"}`}
           onMouseEnter={showSidebar}
           onMouseLeave={hideSidebar}
         >
@@ -65,34 +81,55 @@ export const Dashboard = () => {
             </span>
             <span className="logo_name">Bancario</span>
             <i
-              className={`bx ${isSidebarLocked ? 'bx-lock-alt' : 'bx-lock-open-alt'}`}
+              className={`bx ${
+                isSidebarLocked ? "bx-lock-alt" : "bx-lock-open-alt"
+              }`}
               id="lock-icon"
               title="Toggle Lock"
               onClick={toggleLock}
             ></i>
-            <i className="bx bx-x" id="sidebar-close" onClick={toggleSidebar}></i>
+            <i
+              className="bx bx-x"
+              id="sidebar-close"
+              onClick={toggleSidebar}
+            ></i>
           </div>
 
           <div className="menu_container">
             <div className="menu_items">
-              <ul className="menu_item">
-                <div className="menu_title flex">
-                  <span className="title">Administrador</span>
-                  <span className="line"></span>
-                </div>
-                <li className="item">
-                  <Link to={'/start'} className="link flex" >
-                    <i className="bx bx-world"></i>
-                    <span>Clientes</span>
-                  </Link>
-                </li>
-                <li className="item">
-                  <Link to={'/stats'} className="link flex" >
-                    <i className="bx bx-stats"></i>
-                    <span>Estadisticas</span>
-                  </Link>
-                </li>
-              </ul>
+              {admin !== null & admin !== false ? (
+                <ul className="menu_item">
+                  <div className="menu_title flex">
+                    <span className="title">Administrador</span>
+                    <span className="line"></span>
+                  </div>
+                  <li className="item">
+                    <Link to={"/start"} className="link flex">
+                      <i className="bx bx-world"></i>
+                      <span>Clientes</span>
+                    </Link>
+                  </li>
+                  <li className="item">
+                    <Link to={"/stadistics"} className="link flex">
+                      <i className="bx bx-stats"></i>
+                      <span>Estadisticas</span>
+                    </Link>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="menu_item">
+                  <div className="menu_title flex">
+                    <span className="title">Usuairo</span>
+                    <span className="line"></span>
+                  </div>
+                  <li className="item">
+                    <Link to={"/start"} className="link flex">
+                      <i className="bx bx-world"></i>
+                      <span>Inicio</span>
+                    </Link>
+                  </li>
+                </ul>
+              )}
 
               <ul className="menu_item">
                 <div className="menu_title flex">
@@ -100,16 +137,10 @@ export const Dashboard = () => {
                   <span className="line"></span>
                 </div>
                 <li className="item">
-                  <Link to={'/movements'} className="link flex" >
+                  <Link to={"/movements"} className="link flex">
                     <i className="bx bx-credit-card"></i>
                     <span>Transacciones</span>
                   </Link>
-                </li>
-                <li className="item">
-                  <a href="#" className="link flex">
-                    <i className="bx bxs-badge-dollar"></i>
-                    <span>Divisas</span>
-                  </a>
                 </li>
                 <li className="item">
                   <a href="#" className="link flex">
@@ -138,7 +169,11 @@ export const Dashboard = () => {
                 </li>
 
                 <li className="item">
-                  <Link to="/" className="link flex" onClick={() => cerrarSesion()}>
+                  <Link
+                    to="/"
+                    className="link flex"
+                    onClick={() => cerrarSesion()}
+                  >
                     <i className="bx bx-log-out"></i>
                     <span>Cerrar Sesion</span>
                   </Link>
@@ -157,8 +192,8 @@ export const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className='main-content'>
-            <Outlet/>
+          <div className="main-content">
+            <Outlet />
           </div>
         </nav>
       </div>

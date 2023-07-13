@@ -5,12 +5,11 @@ import { Dashboard } from './components/Dashboard';
 import { LoginPage } from './auth/pages/LoginPage';
 import { UserPage } from './user/pages/UserPage';
 import { Start } from './Start/Pages/Start';
-import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
-import { FavoritesPage } from './favorites/pages/FavoritesPage';
 import { Stadistics } from './Statistics/Pages/Stadistics';
 import { Movements } from './Movements/Pages/Movements';
 import { Transfers } from './Movements/Pages/Transfers';
 import { Deposits } from './Movements/Pages/Deposits';
+import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
 
 export const AppRouter = () => {
 
@@ -42,7 +41,7 @@ export const AppRouter = () => {
         path="/*"
         element={
           isUserAuthenticated() ? (
-            <Navigate to="/dashboard" replace={true} />
+            <Navigate to="/start" replace={true} />
           ) : (
             <LoginPage />
           )
@@ -59,29 +58,14 @@ export const AppRouter = () => {
         }
       />
       <Route
-      path='/stats'
-      element={
-        isUserAuthenticated() ? (
-          <ActiveAccounts/>
-        ) : (
-          <LoginPage/>
-        )
-      }
-      />
-
-    <Route
-      path='/favorites'
-      element={
-        isUserAuthenticated() ? (
-          <FavoritesPage/>
-        ) : (
-          <LoginPage/>
-        )
-      }
-      />
-      <Route
-        path="/login"
-        element={isUserAuthenticated() ? <Navigate to="/dashboard" replace={true} /> : <LoginPage />}
+        path="/stadistics"
+        element={
+          isUserAuthenticated() ? (
+            <Stadistics/>
+          ) : (
+            <LoginPage />
+          )
+        }
       />
       <Route
         path="/Movements"

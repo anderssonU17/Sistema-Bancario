@@ -131,7 +131,7 @@ exports.createDeposit = async(req, res)=> {
         return res.status(200).send({message: 'Se realizo el deposito correctamente.', newTransfer})
 
     } catch (error) {
-        console.error(object);
+        console.error(error);
         return res.status(500).send({message: 'No se pudo completar la tarea. Error en el servidor'})        
     }
 }
@@ -148,7 +148,7 @@ exports.getMovementHistory = async (req, res) => {
       }
   
       // Obtener el historial de movimientos del usuario
-      const movements = await Transfer.find({ beneficiary: userId });
+      const movements = await Transfer.find({ beneficiary: user.number_Account });
   
       return res.status(200).json({ message: 'Historial de movimientos obtenido exitosamente.', movements });
     } catch (error) {

@@ -9,9 +9,6 @@ export const Transfers = () => {
     <>
       <div style={{marginLeft: '80px'}} >
         <div>
-          <Dashboard/>
-        </div>
-        <div>
           <InputBeneficiary action={'transferencia'} />
         </div>
       </div>
