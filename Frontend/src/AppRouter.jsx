@@ -1,23 +1,42 @@
 import React from 'react';
-import { Navigate, Route, Routes, Outlet } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { isUserAuthenticated } from './auth/helpers/LoginHelper';
 import { Dashboard } from './components/Dashboard';
 import { LoginPage } from './auth/pages/LoginPage';
+import { UserPage } from './user/pages/UserPage';
 
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path='/' element={<LoginPage/>}/>
       <Route
-        path='/dashboard'
-        element={isUserAuthenticated() ? (
-          <>
+        path="/dashboard"
+        element={
+          isUserAuthenticated() ? (
             <Dashboard />
-            <Outlet /> {/* Rutas hijas del dashboard */}
-          </>
-        ) : (
-          <Navigate to="/"/>
-        )}
+          ) : (
+            <Navigate to="/login" replace={true} />
+          )
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          isUserAuthenticated() ? (
+            <UserPage />
+          ) : (
+            <Navigate to="/login" replace={true} />
+          )
+        }
+      />
+      <Route
+        path="/"
+        element={
+          isUserAuthenticated() ? (
+            <Navigate to="/dashboard" replace={true} />
+          ) : (
+            <LoginPage />
+          )
+        }
       />
     </Routes>
   );
