@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Dashboard } from "../../components/Dashboard";
 
 import "../../assets/css/start.css";
 
@@ -32,9 +31,6 @@ export const Start = () => {
   return (
     <>
       <div className="container-start">
-        <div>
-          <Dashboard />
-        </div>
         <div id="start-content">
           {admin ? (
             <StartAdmin />

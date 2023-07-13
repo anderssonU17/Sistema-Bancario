@@ -9,13 +9,16 @@ import { Stadistics } from './Statistics/Pages/Stadistics';
 import { Movements } from './Movements/Pages/Movements';
 import { Transfers } from './Movements/Pages/Transfers';
 import { Deposits } from './Movements/Pages/Deposits';
+import { ActiveAccounts } from './Statistics/Pages/ActiveAccounts';
 
 export const AppRouter = () => {
 
   return (
-    <Routes>
+<>
+{isUserAuthenticated() && <Dashboard/>}
+<Routes>
       <Route
-        path="/dashboard"
+        path="/dashboard/*"
         element={
           isUserAuthenticated() ? (
             <Dashboard />
@@ -34,11 +37,11 @@ export const AppRouter = () => {
           )
         }
       />
-      <Route
+       <Route
         path="/*"
         element={
           isUserAuthenticated() ? (
-            <Navigate to="/dashboard" replace={true} />
+            <Navigate to="/start" replace={true} />
           ) : (
             <LoginPage />
           )
@@ -95,5 +98,6 @@ export const AppRouter = () => {
         }
       />
     </Routes>
+</>
   );
 };

@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getOwnUser } from '../api/ApiUser';
+import { getOwnUser, updateEmail, updatePassword } from '../api/ApiUser';
+import '../../assets/css/User.css';
+import Swal from 'sweetalert2';
 
 export const UserPage = () => {
   const [user, setUser] = useState({});
+  const [showUpdateEmailModal, setShowUpdateEmailModal] = useState(false);
+  const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const token = localStorage.getItem('token');
 
@@ -19,139 +25,184 @@ export const UserPage = () => {
     fetchUser();
   }, []);
 
+  const openUpdateEmailModal = () => {
+    if (!showUpdatePasswordModal) {
+      setShowUpdateEmailModal(true);
+    }
+  };
+
+  const closeUpdateEmailModal = () => {
+    setShowUpdateEmailModal(false);
+  };
+
+  const openUpdatePasswordModal = () => {
+    if (!showUpdateEmailModal) {
+      setShowUpdatePasswordModal(true);
+    }
+  };
+
+  const closeUpdatePasswordModal = () => {
+    setShowUpdatePasswordModal(false);
+  };
+
+  const handleUpdateEmail = async () => {
+    try {
+      await updateEmail(newEmail);
+      const updatedUser = { ...user, email: newEmail };
+      setUser(updatedUser);
+      setNewEmail('');
+      closeUpdateEmailModal();
+      Swal.fire({
+        icon: 'success',
+        title: 'Email actualizado',
+        text: 'El email se ha actualizado correctamente.',
+        showConfirmButton: true,
+        confirmButtonText: 'OK'
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo actualizar el email.',
+        showConfirmButton: true,
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    try {
+      await updatePassword(newPassword);
+      setNewPassword('');
+      closeUpdatePasswordModal();
+      Swal.fire({
+        icon: 'success',
+        title: 'Contraseña actualizada',
+        text: 'La contraseña se ha actualizado correctamente.',
+        showConfirmButton: true,
+        confirmButtonText: 'OK'
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo actualizar la contraseña.',
+        showConfirmButton: true,
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section className="user-section">
       <div className="container py-5">
-        <div className="row">
-          <div className="col">
-            <div className="card mb-4">
-              <div className="card-body text-center">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" className="rounded-circle img-fluid" style={{ width: '150px' }} />
-                <h5 className="my-3">{user.name}</h5>
-                <p className="text-muted mb-1">{user.rol}</p>
-                <p className="text-muted mb-4">{user.address}</p>
-                <div className="d-flex justify-content-center mb-2">
-                  <button type="button" className="btn btn-primary">Editar</button>
-                  <button type="button" className="btn btn-outline-primary ms-1">Otro</button>
+        <div className="card">
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-4">
+                <div className="user-card">
+                  <div className="user-avatar">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" className="rounded-circle img-fluid" />
+                  </div>
+                  <h5 className="my-3 user-name">{user.name}</h5>
+                  <p className="text-muted user-role">{user.rol}</p>
+                  <p className="text-muted user-address">{user.address}</p>
+                </div>
+                <div className="btn-group" role="group" aria-label="Editar">
+                  <button type="button" className="btn btn-primary btn-sm" onClick={openUpdateEmailModal}>
+                    Editar Email
+                  </button>
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={openUpdatePasswordModal}>
+                    Editar Contraseña
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="col-lg-8">
-            <div className="card mb-4">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Full Name</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.userName}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.email}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Phone</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.number_Account}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Mobile</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.typeAccount}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Address</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.DPI}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.phoneNumber}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.password}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.workName}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.currency}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.monthlyIncome}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.accountBalance}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Email</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="text-muted mb-0">{user.numberOfTransactions}</p>
-                  </div>
+              <div className="col-md-8">
+                <div className="table-responsive">
+                  <table className="table table-bordered table-hover">
+                    <tbody>
+                      <tr>
+                        <th className="table-title">Full Name:</th>
+                        <td>{user.userName}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Email:</th>
+                        <td>{user.email}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Number Account:</th>
+                        <td>{user.number_Account}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Type Account:</th>
+                        <td>{user.typeAccount}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">DPI:</th>
+                        <td>{user.DPI}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Phone Number:</th>
+                        <td>{user.phoneNumber}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Work Name:</th>
+                        <td>{user.workName}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Currency:</th>
+                        <td>{user.currency}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Monthly Income:</th>
+                        <td>{user.monthlyIncome}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Account Balance:</th>
+                        <td>{user.accountBalance}</td>
+                      </tr>
+                      <tr>
+                        <th className="table-title">Number of Transactions:</th>
+                        <td>{user.numberOfTransactions}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal de edición de correo electrónico */}
+      {showUpdateEmailModal && (
+        <div className="modal-overlay" onClick={closeUpdateEmailModal}>
+          <div className="floating-card" onClick={(e) => e.stopPropagation()}>
+            <h4>Editar Email</h4>
+            <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="Ingrese el nuevo correo electrónico" />
+            <div className="floating-card-buttons">
+              <button className="btn btn-primary" onClick={handleUpdateEmail}>Actualizar Email</button>
+              <button className="btn btn-secondary" onClick={closeUpdateEmailModal}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de edición de contraseña */}
+      {showUpdatePasswordModal && (
+        <div className="modal-overlay" onClick={closeUpdatePasswordModal}>
+          <div className="floating-card" onClick={(e) => e.stopPropagation()}>
+            <h4>Editar Contraseña</h4>
+            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Ingrese la nueva contraseña" />
+            <div className="floating-card-buttons">
+              <button className="btn btn-primary" onClick={handleUpdatePassword}>Actualizar Contraseña</button>
+              <button className="btn btn-secondary" onClick={closeUpdatePasswordModal}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

@@ -37,3 +37,48 @@ export const getOwnUser = async (token) => {
     }
   };
   
+  export const updatePassword = async (password) => {
+    try {
+      const token = localStorage.getItem('token');
+  
+      const data = {
+        password: password,
+      };
+  
+      await axios.put(`${URL}updateOwnUser`, data, {
+        headers: {
+          'x-token': token,
+        },
+      });
+  
+      // Actualizar el estado del usuario o realizar cualquier otra acción necesaria
+  
+      return true; // Si la solicitud fue exitosa
+    } catch (error) {
+      console.error(error);
+      return false; // Si hubo un error en la solicitud
+    }
+  };
+  
+  export const updateEmail = async (email) => {
+    try {
+      const token = localStorage.getItem('token');
+  
+      const data = {
+        email: email,
+      };
+  
+      await axios.put(`${URL}updateOwnUser`, data, {
+        headers: {
+          'x-token': token,
+        },
+      });
+  
+      // Actualizar el estado del usuario o realizar cualquier otra acción necesaria
+  
+      return true; // Si la solicitud fue exitosa
+    } catch (error) {
+      console.error(error);
+      return false; // Si hubo un error en la solicitud
+    }
+  };

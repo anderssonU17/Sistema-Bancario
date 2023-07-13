@@ -6,7 +6,7 @@ const {check} = require('express-validator');
 const {validateJWT} = require('../middlewares/validate-jwt');
 const {validateParams} = require('../middlewares/validate-params')
 
-const { createTransfer, createDeposit } = require('../controller/transfer.controller');
+const { createTransfer, createDeposit, getMovementHistory} = require('../controller/transfer.controller');
 const { administradorRol } = require('../middlewares/validate-rol');
 
 api.post('/transfer', [
@@ -28,6 +28,10 @@ api.post('/deposit',[
     check('currency', 'El parametro "currency" es necesario para realizar la transferencia.').not().isEmpty(),
     validateParams
 ], createDeposit )
+
+api.get('/movement',[
+    validateJWT,
+], getMovementHistory )
 
 module.exports = api
 

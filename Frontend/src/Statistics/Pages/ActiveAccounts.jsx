@@ -10,9 +10,6 @@ export const ActiveAccounts = () => {
   return (
     <>
       <div style={{display: 'flex', marginLeft: '80px'}} >
-        <div>
-          <Dashboard />
-        </div>
         <div className="table-container" >
           <TableUsers token={token} />
         </div>

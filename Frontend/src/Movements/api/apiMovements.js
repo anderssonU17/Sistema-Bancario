@@ -28,9 +28,9 @@ export const transfer = async (transfer) => {
      }).then(
         (response) => {
             if(response.isConfirmed) {
-                window.location.href = '/start';
+                window.location.href = '/movements';
             }else{
-                window.location.href = '/start';
+                window.location.href = '/movements';
             }
         }
      )
@@ -68,9 +68,9 @@ export const deposit = async (deposit) => {
      }).then(
         (response) => {
             if(response.isConfirmed) {
-                window.location.href = '/start';
+                window.location.href = '/movements';
             }else{
-                window.location.href = '/start';
+                window.location.href = '/movements';
             }
         }
      )
