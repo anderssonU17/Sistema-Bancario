@@ -17,7 +17,7 @@
   display: flex;
   justify-content: space-between;
 }
-.swal2-input {
+.swal2-input-local {
   display: block;
   max-width: 500px;
   padding: 0.5rem 0.75rem;
@@ -35,7 +35,7 @@
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-.swal2-select {
+.swal2-select-local {
   display: block;
   width: 221px;
   border-radius: 4px;

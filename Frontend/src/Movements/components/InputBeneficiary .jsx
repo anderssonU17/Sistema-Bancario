@@ -79,7 +79,7 @@ export const InputBeneficiary = (props) => {
               Numero de cuenta de destinatario:
             </label>
             <input
-              className="swal2-input"
+              className="swal2-input-local"
               type="number"
               value={accountNumber}
               onChange={handleAccountNumberChange}
@@ -89,7 +89,7 @@ export const InputBeneficiary = (props) => {
             <label className="swal2-label">Tipo de cuenta:</label>
             <select
               id="typeAccount"
-              className="swal2-select"
+              className="swal2-select-local"
               value={typeAccount}
               onChange={handleTypeAccountChange}
             >
@@ -106,7 +106,7 @@ export const InputBeneficiary = (props) => {
             <label className="swal2-label">Monto de {props.action}:</label>
             <input
               id="amount"
-              className="swal2-input"
+              className="swal2-input-local"
               type="number"
               value={amount}
               onChange={handleAmountChange}
@@ -115,7 +115,7 @@ export const InputBeneficiary = (props) => {
           <div className="section-action">
             <label className="swal2-label">Moneda para {props.action}:</label>
             <select
-              className="swal2-select"
+              className="swal2-select-local"
               id="currency"
               value={currency}
               onChange={handleCurrencyChange}
